@@ -8,9 +8,9 @@ This reference is incomplete. It is not recommended for use
 ## Progress
 - [x] Structure
 - [x] Statements
-- [-] Arrays
+- [x] Arrays
 - [ ] Strings
-- [-] Math
+- [x] Math
 - [ ] User Interaction
 - [ ] User Defined Functions
 - [ ] Event Handlers
