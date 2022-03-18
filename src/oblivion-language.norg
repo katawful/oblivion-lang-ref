@@ -1,0 +1,2026 @@
+@document.meta
+  title: oblivion-language
+  description: 
+  authors: kat
+  categories: 
+  created: 2022-01-14
+  version: 0.0.11
+@end
+
+| Oblivion
+
+= ToC Table of Contents
+
+
+* Oblivion Scripting Language Reference for xOBSE v22.6.1
+
+  Oblivion Language (obl) is a dynamically typed interpreted language for the video game /The Elder
+  Scrolls IV: Oblivion/. While language within development tools refers to "compilation" of scripts,
+  it is only a temporary transpilation to, mildly human readable, internal game (not machine)
+  bytecode. It is thus purely interpreted in function, running all scripts as they finish serially
+  in a single thread. The order of execution is based on the order of internal ID the script /or/
+  object attached to script is bound to.
+  #contexts language-reference core test
+  - [ ] verify that "compilation" is just parsing
+
+  `obl` has been expanded upon by the community, first with *OB*:livion *S*:cript *E*:xtender
+  (OBSE), then in recent years with xOBSE. Because of the wide spread usage and the greatly expanded
+  syntax, this documentation will simply be assuming the features provided with the original game
+  are not solely valid. Any problems related to that will be discussed as they arrive.
+
+ ** Notation
+
+    `obl` is a line-based language, i.e. each line must contain a valid execution of code. This is
+    similar to scripting languages like Vimscript and Bash. However unlike those languages,
+    constructs are literal and cannot be expanded. A statement must start and end on the same line.
+
+    For the purposes of this documentation, an extended Backus Naur form (eBNF) is used for
+    notation.
+
+    Also note, for the sake of this documentation, a 'construct' will be defined as any valid object
+    of code related to this language. This definition is solely to discuss all aspects of the
+    language in a more concise manner.
+
+ ** Essential Constructs
+
+  *** Loose Language
+
+      `obl` is completely case insensitive, and is also whitespace insensitive (assuming constructs
+      are completed within their line).
+
+  *** Literal Language
+
+      `obl` is a literal language, and thus everything must be declared within the language file.
+      While the scripts written can be attached to game objects, or used as their own functions, the
+      name as such must be the first thing declared by the script file:
+
+      @code ebnf
+      nameDeclare = scriptDeclarator, scriptName, eol;
+      scriptDeclarator = "scn" | "scriptname";
+      scriptName = identifier;
+      eol = "\n" | "\r";
+      identifier = {ascii};
+      @end
+
+      @code obse
+      scn ThisIsTheName
+      @end
+
+   **** Identifiers
+
+        It is not know the extent to which ASCII characters are allowed in `obl` for identifiers.
+        There is a distinct difference between, for instance, script names and variable names that
+        are accepted by the compiler. Thus for this reason it is *highly* recommended to only ever
+        use unaccented ASCII Latin and Arabic-Indic characters. Snakecasing can work for variables,
+        but this behavior is unknown. In addition, do not start a script name with a numeral. The
+        game may attempt to process the script name as a number. If one wishes to set their script
+        name apart from others alphanumerically, it is better to only use a alphabetical prefix.
+
+  *** Script Body
+
+      `obl` can not run functions arbitrarily. As it is a game-oriented language, the scripts run in
+      certain game-specific blocks. Everything outside is top-level script information.
+
+      @code ebnf
+      script = nameDeclare, [{variableDeclaration | beginBlock}];
+      @end
+
+      @code obse
+      scn ScriptName
+      int intVariable
+      begin GameMode
+        set intVariable to 1 + intVariable
+        PrintC "%g", intVariable
+      end
+      float floatVariable
+      begin MenuMode
+        set floatVariable to 1.33
+        PrintC "%.0f", floatVariable
+      end
+      @end
+
+      See ["Begin" Blocks]{*** "Begin" Blocks} and [Variable Declarators]{*** Variable Declarators} for more information on top-level
+      information.
+
+  *** Script Type
+
+      While not a part of the language spec itself, `obl` language files when brought into the
+      game's development tools can be defined as one of 3 types: "Quest Script", "Object Script",
+      and "Magic Effect Script", with "Object Script" being the default. More details about these
+      will be discussed in [Script Types]{** Script Types}.
+
+  *** Static Typing by Assumption
+
+      `obl` is technically dynamically typed. There are a lot of scenarios where the compiler does
+      keep static typing, however there are an equal amount of times where a runtime error will
+      occur. Static typing can be ignored with a type forcing construct, however this does not
+      prevent runtime errors:
+
+      @code obse
+      ; the following will fail as AddItem is a vanilla function
+      ; explained a later section, this is an error when trying to use an array, a non-vanilla
+      ;   feature
+      AddItem Torch02 array[0]
+      ; by using parentheses we can force the type during runtime
+      AddItem Torch02 (array[0])
+      @end
+
+      Thus typing can be dynamic with intervention. For the ease of development, it is best to
+      assume that typing is static. The exact reasons why this is the case will be discussed later.
+
+  *** Manifest Typing
+
+      Types are declared explicitly in `obl`, and therefore variables cannot change type inside
+      their scope:
+
+      @code obse
+      scn ScriptName
+      ; types must be declared
+      int i
+      begin gamemode
+      let i := 1
+      ; they also can't be changed
+      let i := "string" ; ERROR
+      end
+      @end
+
+  *** Strong/Weak Typing
+
+      `obl` has a mix of strong and weak typing. It is similar to implicitly typed languages like
+      Lua and Javascript, where some types can be converted (i.e.: `let x = 1 + "hi"`), however the
+      scenarios in which implicit type conversion actually happens is limited. 
+
+   **** Implicit Type Forcing via OBSE Expressions (OE)
+
+        As `obl` has been expanded by community efforts via OBSE, new data types have been
+        introduced. In order to directly integrate itself with the features available in the
+        original game, a mechanism to detect and force types to be weak:
+
+        @code ebnf
+        OE = "(", expr, ")";
+        @end
+
+        @code obse
+        ; array[0] contains an integer, but AddItem only sees the array type
+        ; the parentheses forces array[0] to be parsed internally to the type it contains
+        AddItem Torch02 (array[0])
+        @end
+
+        Note that OE also overlaps with parentheses for operation ordering. This might lead to
+        unexpected behavior if one is unaware.
+
+   **** Compile with OBSE Expressions Enabled (COEE)
+
+        Any expression can be attempted to be evaluated with OE. If more direct control is needed,
+        you can compile with OBSE expressions enabled for everything:
+
+        @code ebnf
+        beginBlock = startBlock, innerBlock, endBlock;
+        startBlock = "begin", (gameFeature 
+                             | function 
+                             | coeeGameFeature 
+                             | coeeFunction)
+                            , eol;
+        function = "function", "{", {paramter}, "}";
+        coeeGameFeature = "_", gameFeature;
+        coeeFunction = "_", function;
+        endBlock = "end", eol;
+        @end
+
+        @code obse
+        scn coeeExample
+        int i
+        begin _gamemode
+          AddItem Torch02 array[0] ; no longer an error
+          let i := "hello" ; however this is a runtime error
+        end
+        begin _function {}
+        end
+        @end
+
+        This removes the need for strict OE usage (instead delegating parentheses to evaluation
+        order), but COEE may also present its own issues. Only use if OE fails.
+
+        > COEE can be considered a semantical problem, not a syntaxical one
+
+ ** Language
+
+  *** Lexical Conventions
+
+      As stated previously, `obl` is a rather loose language. It is completely case and whitespace
+      insensitive. Indentation and case are completely up to the end developer, though it is
+      recommended to keep a convention.
+
+   **** Keywords
+
+        The following is a list of language keywords:
+        #contexts language-reference lexical test
+        - [ ] check begin and end if they're keywords
+        - while
+        - foreach
+        - loop
+        - let
+
+        Interestingly, other keywords like 'if' can be used as variables. This does not produce
+        runtime errors. This is limited to constructs found in the vanilla game mostly.
+
+        All game functions, block types, and any EditorID are considered as keywords and cannot be
+        used as variables.
+
+  **** Text Format
+
+        `obl` can only accept printable ASCII characters (i.e. up to byte 127) in any applicable
+        construct. Additionally, string variables can contain any of the extended ASCII characters.
+
+  *** Operators
+
+      The following is a list of operators found in `obl`. This is just a cursory list, see the
+      respective sections of each list for how they work.
+
+      @table
+      Operator | Type | Usage | Precedence
+      -
+      `+` | Binary | Math, Concatenation | 9
+      `-` | Binary | Math | 9
+      `*` | Binary | Math | 10
+      `/` | Binary | Math | 10
+      `^` | Binary | Math | 11
+      `%` | Binary | Math | 10
+      -
+      `:` | Binary | Slice/Range | 3
+      `::` | Binary | Make Pair | 3
+      `->` | Binary | Member Access | 15
+      `<-` | Binary | ForEach Access | 15
+      '.' | Binary | Method/Namespace Access
+      -
+      `>` | Binary | Comparison | 5
+      `<` | Binary | Comparison | 5
+      `<=` | Binary | Comparison | 5
+      `>=` | Binary | Comparison | 5
+      `==` | Binary | Comparison | 4
+      `!=` | Binary | Comparison | 4
+      `&&` | Binary | Comparison | 2
+      `||` | Binary | Comparison | 1
+      `!` | Unary | Comparison | 13
+      -
+      `()` | n/a | Precedence/OE | 14
+      `[]` | Binary | Subscript | 15
+      -
+      `>>` | Binary | Bitwise | 8
+      `<<` | Binary | Bitwise | 8
+      `&` | Binary | Bitwise | 7
+      `|` | Binary | Bitwise | 6
+      -
+      `-` | Unary | Negation | 12
+      `$` | Unary | Stringicize | 12
+      `#` | Unary | Numericize | 12
+      `*` | Unary | Dereference/Unbox | 12
+      `&` | Unary | Box | 12
+      -
+      `:=` | Binary | Assignment | 0
+      `+=` | Binary | Assignment | 2
+      `-=` | Binary | Assignment | 2
+      `*=` | Binary | Assignment | 2
+      `/=` | Binary | Assignment | 2
+      `^=` | Binary | Assignment | 2
+      @end
+
+      > Note that highest precedence is 15
+
+  *** Script Types
+
+      Any script can be 1 of 3 types: Quest, Object, and Magic Effect alongside user-defined
+      functions.
+
+   **** Quest Scripts
+
+        Quest scripts can run at any point in time, as long as the quest the script is attached to
+        is running. Quest scripts should be considered global functions. They are defined in the
+        same manner but have some unique constructs.
+
+    ***** fQuestDelayTime
+
+          Quest scripts run on an interval in order to improve performance. This is handled by the
+          float variable `fQuestDelayTime`. It can be set to any floating point value, but scripts
+          cannot be processed faster than the game updates. This means a value of 0.01 is updating
+          at around 60 frames per second (16ms frametime). As well, this value *does not* mean that
+          each line updates at the value of `fQuestDelayTime`. It means the script *starts*
+          processing at this value. One should be aware as they make larger scripts, and use
+          profiling tools to make sure script processing time isn't more than 16ms, the 60fps
+          frametime.
+
+          This value defaults to 5 seconds.
+
+    ***** Quest Namespace
+
+          All variables declared in a quest script are added to a namespace identified with the name
+          of the quest the quest is attached to. These variables are thus accessible anywhere, and
+          unlike the script itself, can be updated anywhere at anytime regardless of if the quest
+          itself is running. The format is as so:
+
+          @code ebnf
+          questVariable = namespace, '.', variable;
+          namespace = questName;
+          questName = identifier;
+          variable = identifier;
+          @end
+
+          @code obse
+          scn QuestScript
+          int questVar
+          ; quest name is "QuestName"
+          scn OtherScript
+          begin GameMode
+          let QuestName.questVar := 1
+          end
+          @end
+
+          All variable limitations apply.
+          ---
+
+        Since quest scripts aren't attached to objects, most block types have no use. Thus the
+        majority of the use is via `MenuMode` and `GameMode` block types alongside user-defined
+        functions.
+
+   **** Object Scripts
+
+        Object scripts attach to objects. They use the majority of begin block types. They also
+        serve as the source type for user-defined functions. See the section on User-Defined
+        Functions for more details.
+
+   **** Magic Effect Scripts
+
+        Magic effect scripts are used to create magic effects. They are unique in that they only
+        fire during when 'GameMode' blocks are active but only use the 3 unique 
+        [Magic Effect Block Types]{**** Magic Effect Block Types}. Some other block types work, but
+        this behavior is unpredictable. 'MenuMode' is the only one that behaves exactly. These
+        scripts are mostly designed to run on actors (NPCs and creatures), but will run on actor
+        corpses, doors, and furniture. When run on these objects, the script will run once.
+
+  *** Variables
+
+      Variables store values of the specified type (see: [Variable Types]{**** Variable Types}).
+      They can be contained in 3 scopes: global, quest, and script.
+
+   **** Global Variables
+
+        Global variables are variables that can be accessed without any namespace. However they can
+        only be floats or integers, and thus are mostly used for game settings. Additionally since
+        they don't have a namespace, they can easily become overloaded. Thus they should only be
+        used when direct player intervention is needed via the game's console.
+
+   **** Quest Variables
+
+        Quest variables are namespaced variables. See [Quest Namespace]{***** Quest Namespace}.
+
+   **** Script Variables
+
+        Script variables are scoped to the script that calls it, but its time of existence depends
+        on the type of script/the object attached to it.
+        - For object scripts, variables are temporarily saved to the object its attached to.
+        - For magic effect scripts, variables are never saved.
+        - For user-defined functions, variables are never saved.
+
+  *** Types
+
+   **** Literal Types
+
+        Literals can be used in any place a variable can, and are simply the direct connotation of
+        what the type refers to. There are a number of literals available to `obl`:
+
+        - String literals: Any ASCII characters enclosed in double quotes: `"string"`
+        - Integer literals: Any Arabic-Indic numeral, with optional negative symbol: `-1, 333`
+        - Float literals: Any Arabic-Indic numeral with a period for decimal notation: `-1.22, 3.44`
+        - Scientific literal: Any scientific notation numeral, using the E notation: `3E10, 3e-10`
+        -- These numbers are all floats
+        - Reference literal: Any game object reference, usually an identifier: `Torch02`
+        -- Any EditorID is acceptable here, which includes every valid object found in a plugin
+        - Type literal: Any unenclosed string, identifiers not found as game objects
+
+  **** Variable Types
+
+        Variable types are the types that variables can be.
+        - floats: 32-bit/single precision. Effective precision is 1.18E-38 to 3.40E38
+        - integers: integers internally stored as floats
+        - reference: stores a game object, object must be persistent
+        - array: reference to an array, type unspecified
+        - string: reference to a string, a container type
+        #contexts language-reference core test
+        - [ ] check if numbers are actually stored as floats
+
+        @code ebnf
+        variableDeclaration = varType, variable;
+        varType = "float"
+                | "int"
+                | "short"
+                | "long"
+                | "ref"
+                | "array_var"
+                | "string_var"
+        @end
+
+        @code obse
+        scn VarDeclaration
+        float floating
+        int integer
+        ref reference
+        array_var array
+        string_var string
+        @end
+
+   ***** Numbers
+
+          All numbers are ultimately stored as floats, there is no use for distinguishing between
+          shorts and longs. Thus there are only 2 types, with one having 3 aliases for declaration:
+
+          @table 
+          Type | Declaration
+          -
+          float | `float`
+          integer | `int`, `short`, `long`
+          @end
+
+          *NOTE:* the following two headings are here to address 2 solutions to integers being
+          stored as floats. While it is absolutely confirmed that the game internally stores
+          integers in scripts as floats, there is conflicting information on if they are stored as
+          double-precision or single-precision floats. Thus until one of these is confirmed, both
+          are assumed to be true and responsible for behaviors found when working with high number
+          integers.
+
+      ****** Integers as single floats
+
+            As all numbers are stored as floats internally, the only precision is the limitations of
+            the 32-bit floats available. Therefore the largest integer value you can make where
+            there's a +/- 1 addition is 16,777,216. Higher values are rounded down. This is the
+            source of weird math behavior.
+
+      ****** Integers as double floats
+
+            As all numbers are stored as double-precision floats internally, there is no use in
+            distinguishing between shorts and longs. Thus the full signed range up to 2,147,483,647
+            can be used for any integer type. 
+
+    ***** Reference
+
+          Reference variables, confusingly, do not refer to anything. They contain the metadata of
+          the game object using the EditorID of the object as the name. EditorID is an unenclosed
+          string of characters. FormID, a hexadecimal number, can be stored in a reference variable
+          but only as the return value of a function. It'll get converted to the EditorID
+          implicitly.
+
+          @table
+          Type | Declaration
+          -
+          reference | ref
+          @end
+
+          @code obse
+          scn HowRefVarsWork
+          ref editorID
+          begin gamemode
+          let editorID := Torch02
+          end
+          @end
+
+    ***** Strings
+
+          Strings are standard ASCII. They behave as containers, taking all array operations
+          available. They additionally get saved to the player's save game. Variables of this type
+          behave in specific ways. See the section on Strings in Expressions for more details.
+
+          @table
+          Type | Declaration
+          -
+          string | string_var
+          @end
+
+    ***** Arrays
+
+          Arrays are a generalized container type that gets saved to the player's saved game. They
+          can be 1 of three types:
+
+          ~ Array: this is a 0-indexed array. Standard array operations apply
+          ~ Map: a non-ordered array that takes any number as index
+          ~ StringMap: a non-ordered array that takes any string as index
+
+          @table
+          Type | Declaration
+          -
+          array | array_var
+          @end
+
+          Array variables, like string variables are references to the container. The container must
+          exist before manipulation, see the section on Arrays in Expressions for more details.
+
+   **** Return and Parameter Types
+
+        Documentation of game functions will show a variety of types that can be returned and used
+        as parameters. The above types can all be used in addition to the following:
+
+        @table
+        Type | Source Type | Stored Type
+        -
+        chars | `4` character string, optionally enclosed in quotes | String
+        bool | `1` for true, `0` for false | Number
+        formatString | a string that takes format specifiers, plus up to 20 arguments {| 1} | String
+        FormID | a hexadecimal number of an object {| 2} | Reference
+        multi | any non-object value | n/a
+        @end
+
+        | 1
+        Format specifiers can be found in the sections on Strings in Expressions.
+
+        | 2
+        See the section on References for more details.
+
+   **** Null Type
+
+        You cannot assign anything to the null type, it is simply returned upon a runtime error.
+
+  *** Statements
+
+      Statements are constructs that simply declare an action in the game. They do not return
+      anything as a result. There are 12 main statements in `obl`:
+
+   **** "Begin" Blocks
+
+        `obl` does not have traditional function blocks. Being a game specific language, the
+        language instead has constructs that wrap around internal game features. All execution
+        happens within these blocks, and are colloquially known as "begin blocks". For clarity, this
+        documentation will use this definition to distinguish these constructs from others. A begin
+        block is defined as 2 top-level lines of code, inside of which all programming is achieved.
+        The first line starts the begin block and defines which game feature this block runs for,
+        the second line terminates the block:
+
+        @code ebnf
+        beginBlock = startBlock, innerBlock, endBlock;
+        startBlock = "begin", (gameFeature | function), eol;
+        function = "function", "{", {paramter}, "}";
+        endBlock = "end", eol;
+        @end
+
+        @code obse
+        scn beginBlock
+        begin gamemode
+        end
+        begin function {}
+        end
+        @end
+
+        A script file can contain any number of "gameFeature" blocks in any order, but a script can
+        only contain one "function" block with no others.
+
+    ***** Begin Block Game Features
+
+          Begin blocks must be attached to specific game features, or be a function. Some take
+          arguments, optionally or no, and multiple. The syntax is like so:
+
+          @code ebnf
+          beginBlock = startBlock, innerBlock, endBlock;
+          startBlock = "begin", (gameFeature 
+                              | function 
+                              | coeeGameFeature 
+                              | coeeFunction)
+                              , eol;
+          gameFeature = featureName, {parameter};
+          parameter = identifier | identifier, ",";
+          @end
+
+          @code obse
+          scn ExampleBeginBlocks
+          begin GameMode
+          end
+          begin MenuMode 1011
+          end
+          begin OnAlarm 0, PlayerREF
+          end
+          @end
+
+          The following is a description of each, parenthesized means it is optional:
+
+    ***** General Block Types
+          @table
+          Game Feature | (Number of Arguments) | Type | Description
+          -
+          'GameMode' | 0 | n/a | Runs continuously during normal gameplay
+          'MenuMode' | (menuType) | int | Runs continuously during any menu, optionally within a specific menu type. See {| Menu Types}
+          'OnActivate' | 0 | n/a | Runs once when scripted object is activated by an actor, blocks normal activation use of scripted object. Must be scripted back in
+          'OnActorEquip' | objectID | ref | Runs once when scripted actor equips objectID
+          'OnActorUnequip' | objectID | ref | Runs once when scripted actor unequips objectID
+          'OnAdd' | (objectID) | ref | Runs once whenever script object is added to an inventory or objectID's inventory. See {| OnAdd}
+          'OnAlarm' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally caused by the actorID
+          'OnAlarmVictim' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally on the actorID
+          'OnDeath' | (actorID) | ref | Runs once whenever the scripted actor dies, optionally if the actorID kills said actor. See {| OnDeath}
+          'OnDrop' | (actorID) | ref | Runs once whenever the scripted object is removed from an inventory, optionally from the actorID's inventory. See {| OnDrop}
+          'OnEquip' | (actorID) | ref | Runs once whenever the scripted object is equipped, optionally by the actorID. See {| OnEquip}
+          'OnHit' | (actorID) | ref | Runs once whenever the scripted actor is hit, optionally hit by the actorID. See {| OnHit}
+          'OnHitWith' | (objectID) | ref | Runs once whenever the scripted actor/object is hit by any weapon, optionally hit by the objectID. See {| OnHitWith}
+          'OnKnockout' | 0 | n/a | Runs once whenever the scripted actor enters the "knocked out" state
+          'OnLoad' | 0 | n/a | Runs once whenever the scripted object's 3D model loads. See {| OnLoad}
+          'OnMagicEffectHit' | (effectID) | chars | Runs once whenever the scripted actor/object is hit by any magic effect, optionally hit by the effectID. See {| OnMagicEffectHit}
+          'OnMurder' | (actorID) | ref | Non-functional block type. See {| OnMurder}
+          'OnPackageChange' | packageID | ref | Runs once whenever the scripted actor changes from the packageID to some other packageID. See {| OnPackageChange}
+          'OnPackageDone' | packageID | ref | Runs once whenever the scripted actor finishes packageID. See {| OnPackageDone}
+          'OnPackageEnd' | packageID | ref | Alias for OnPackageDone. See {| OnPackageDone}
+          'OnPackageStart' | packageID | ref | Runs once whenever the scripted actor starts packageID
+          'OnReset' | 0 | n/a | Runs once when the scripted object's cell is reset due to time expiration
+          'OnSell' | (actorID) | ref | Runs once when the scripted object is sold, optionally when sold by actorID
+          'OnStartCombat' | (actorID) | ref | Runs once when the scripted actor enters combat, optionally when starting combat with actorID
+          'OnTrigger' | (objectID) | ref | Runs continuously whenever anything is colliding with the scripted object, optionally by objectID
+          'OnTriggerActor' | (actorID) | ref | Runs continuously whenever an actor is colliding with the scripted object, optionally by actorID
+          'OnTriggerMob' | (actorID) | ref | Runs continuously whenever a mobile object is colliding with the scripted object, optionally by actorID. See {| OnTriggerMob}
+          'OnUnequip' | (actorID) | ref | Runs once whenever the scripted object is unequipped, optionally by the actorID. See {| OnUnequip}
+          @end
+
+    ***** Magic Effect Block Types
+          The following are only available for magic effect scripts:
+          @table
+          Game Feature | (Number of Arguments) | Type | Description
+          -
+          'ScriptEffectFinish' | 0 | n/a | Runs once whenever the scripted spell effect finishes. See {| ScriptEffectFinish}
+          'ScriptEffectStart' | 0 | n/a | Runs on the first iteration of a scripted spell effect. See {| ScriptEffectStart}
+          'ScriptEffectUpdate' | 0 | n/a | Runs on the first iteration of a scripted spell effect and each time it runs. See {| ScriptEffectUpdate}
+          @end
+
+          Notes:
+          - objectID is the ID of some object of any kind that can be interacted with, such as an actor or item
+          - actorID is the ID of an actor, i.e. a humanoid
+          - effectID is an unenclosed 4 letter chars of a magic effect
+          - packageID is the ID of an AI package
+ 
+    ***** Menu Types
+          @table
+          General Type
+          -
+          Number | Type
+          -
+          1 | Stats, magic, inventory, quest log
+          2 | Any other non-console menu
+          3 | Console: broken functionality, use function `IsConsoleOpen`
+          @end
+        
+          @table
+          Specific Type
+          -
+          Number | Type
+          -
+          1001 | Message
+          1002 | Inventory
+          1003 | Stats
+          1004 | HUDMain
+          1005 | HUDInfo
+          1006 | HUDReticle
+          1007 | Loading
+          1008 | Container, Barter
+          1009 | Dialog
+          1010 | HUDSubtitle
+          1011 | Generic
+          1012 | SleepWait
+          1013 | Pause
+          1014 | LockPick
+          1015 | Options
+          1016 | Quantity
+          1017 | Audio
+          1018 | Video
+          1019 | VideoDisplay
+          1020 | Gameplay
+          1021 | Controls
+          1022 | Magic
+          1023 | Map
+          1024 | MagicPopup
+          1025 | Negotiate
+          1026 | Book
+          1027 | LevelUp
+          1028 | Training
+          1029 | BirthSign
+          1030 | Class
+          1031 | Attributes
+          1032 | Skills
+          1033 | Specialization
+          1034 | Persuasion
+          1035 | Repair / Ingredient Selection (Alchemy sub-menu)
+          1036 | RaceMenu (Character Generation Screen)
+          1037 | SpellPurchase
+          1038 | Load
+          1039 | Save
+          1040 | Alchemy
+          1041 | SpellMaking
+          1042 | Enchantment
+          1043 | EffectSetting
+          1044 | Main
+          1045 | Breath
+          1046 | QuickKeys
+          1047 | Credits
+          1048 | SigilStone
+          1049 | Recharge
+          1051 | TextEdit
+          @end
+
+          | OnAdd
+          This only behaves as expected with persistent references (see the section on References).
+          An item added to a container with this block and removed within the same call of this
+          block will simply do nothing. An additional call is needed.
+
+          | OnDeath
+          If the scripted actor gets called with `SayTo` while this block activates (i.e. dies while
+          talking), this block will trigger after `SayTo`. Additionally, this block type does not
+          fire immediately, do not rely on this for time sensitive functionality.
+
+          | OnDrop
+          OnDrop only runs when the object is /removed/, not when it no longer exists. It also,
+          confusingly, doesn't run when the object is dropped (i.e. placed on the ground). Thus this
+          is not a test for seeing if an object is on the ground.
+
+          | OnEquip
+          OnEquip does not behave as expected. It'll only run on items that an actor can physically
+          equip, regardless of status. 
+          - Broken items and non-equippable items will fire this block
+          - Potions, poisons, and ingredients do not fire this block
+          - Books do not fire this block during combat if this feature is disallowed
+          - Unlike OnActivate, this will not stop the player from reading a book
+          - Enchanted scrolls will not fire this block
+          - The game function `EquipItem` *does not* fire this block, use `EquipItem2`/`EquipItem2NS` instead
+          -- The game function `UnequipItem` *does* fire OnUnequip howeve
+
+          | OnHit
+          The game function `GetDetected` behaves weirdly inside this block. This block fires
+          /after/ the hit occurs, not as it occurs, thus the actor will be in an aware state no
+          matter what. Thus `GetDetected` will not provide the true value expected when used in this
+          manner.
+
+          | OnHitWith
+          This can work with objectIDs that are 'Activators', but only when the objectID hitting the
+          scripted object is of the type Ammo. Other weapon types do not work.
+
+          | OnLoad
+          This block does not work with quest scripts. A 3D object loads whenever you enter the 5x5
+          cell grid in an exterior cell, or in any interior cell.
+
+          | OnMagicEffectHit
+          This works on actors, activators, containers, doors, and furniture. It does not work on
+          lights or regular inventory items. In addition, the object being hit must have collision
+          meshes.
+
+          | OnMurder
+          As this is broken, build murder detection with 'OnDeath' instead.
+
+          | OnPackageChange
+          Interrupt packages, such as combat or conversation packages, do not count towards a package
+          change. A change only occurs when a new package is chosen by the scripted actor, it must be
+          different from the specified packageID
+
+          | OnPackageDone
+          Packages can be completed through a failure state, unless the 'Must Reach Location' or
+          'Must Complete' flags of the package are checked. Some packages also have no complete
+          state, and thus will never trigger this block.
+
+          | OnTriggerMob
+          Mobile objects are considered: actors (NPCs and creatures), arrows, non-bolt magic
+          projectiles, and activators with collision.
+
+          | OnUnequip
+          Broken items do not fire this block, even if they can be equipped/unequipped. To fire this
+          block, the broken item must be repaired.
+
+          | ScriptEffectFinish
+          'ScriptEffectUpdate' block with a `return` statement placed before this block will prevent
+          this block from running. See the section on the [Return Statement]{**** Return Statement} in [Statements]{*** Statements}
+          for more info.
+          This block won't fire for scripted apparel enchantments or abilities.
+
+          | ScriptEffectStart
+          This block won't fire for scripted apparel enchantments or abilities.
+
+          | ScriptEffectUpdate
+          'ScriptEffectUpdate' block with a `return` statement placed before this block will prevent
+          this block from running. See the section on the [Return Statement] in [Statements]
+          for more info.
+          This block won't fire for scripted apparel enchantments or abilities.
+
+   **** Variable Declarators
+
+        @code ebnf
+        variableDeclaration = varType, variable, eol;
+        varType = "float"
+                  |"int"
+                  |"short"
+                  |"long"
+                  |"ref"
+                  |"array_var"
+                  |"string_var"
+        @end
+
+        @code obse
+        scn VariableDeclarators
+        float floating
+        int integer
+        ref reference
+        array_var array
+        string_var string
+        begin gamemode
+        end
+        @end
+
+        Variable declaration happens outside of "begin blocks". Declaration is different from
+        definition. A declaration only describes the type that a variable has, it does not
+        initialize a value. All types will default initialize to 0 for comparative needs.
+        
+        #contexts language-reference core test
+        - [ ] Check if all types default initialize to 0
+
+   **** Set Statement
+      
+        @code ebnf
+        setStatement = "set", variable, "to", (expression | literal), eol;
+        @end
+
+        @code obse
+        scn SetStatement
+        int statement
+        begin gamemode
+        set statement to 1
+        end
+        @end
+
+        The set statement is the statement found in the original release of `obl`. It it thus the
+        most simple of the 2 variable statements. The set statement does not work with most OBSE
+        constructs, however unlike the let statement this statement works with the game's console.
+        This means it can be used for INI files, see the section on User Interaction for more
+        information on this. It is also capable of constructing string expressions, unlike the let
+        statement. See the section on Strings in Expressions for more.
+
+   **** Let Statement
+
+        @code ebnf
+        letStatement = "let", variable, (assignment | compoundAssignment), (expression | literal), eol;
+        assignment = ":=";
+        compoundAssignment = "+="
+                            |"-="
+                            |"*="
+                            |"/="
+                            |"^=";
+        @end
+
+        @code obse
+        scn LetStatement
+        int statement
+        begin gamemode
+        let statement := 1
+        let statement += 1
+        end
+        @end
+
+        The let statement is the statement introduced with OBSE. It is much more capable, allowing
+        the full features of OBSE alongside compound assignment. Compound assignment allows you to
+        replace basic arithmetic on the same variable compared to assigning a variable to the value
+        of the variable and the basic arithmetic. The example is as shown:
+
+        @code obse
+        scn CompoundAssignment
+        int assignment
+        begin gamemode
+        ; basic arithmetic without compound assignment
+        let assignment := assignment + 1
+        ; with compound assignment
+        let assignment += 1
+        end
+        @end
+
+   **** Return Statement
+
+        @code ebnf
+        returnStatement = "return", eol;
+        @end
+
+        @code obse
+        scn ReturnStatement
+        int x
+        begin gamemode
+        set x to 1
+        return
+        ; anything below here is not processed
+        set x to 2
+        end
+        @end
+
+        The return statement is not like other languages. It does not return any values, but instead
+        stops the script from processing. It can be called at any point in time.
+
+   **** Conditionals
+      
+        @code ebnf
+        conditional = if, [{elseIf}], [else], "endif";
+        if = "if", (expression | literal), eol, [{statement}];
+        elseIf = "elseif", (expression | literal), eol, [{statement}];
+        else = "else", [{statement}];
+        @end
+
+        @code obse
+        scn Conditional
+        int x
+        begin gamemode
+        set x to y
+        if 1
+          set x to 1
+        elseif 0
+          set x to 0
+        else
+          set x to -1
+        endif
+        print
+        set x to y
+        end
+        @end
+        
+        Conditionals in `obl` are standard to most languages for the most part. `obl` accepts the
+        standard C-style comparator binary operators:
+
+        @table
+        Symbol | Meaning
+        -
+        `==` | Left equal to right
+        `!=` | Left not equal to right
+        `>` | Left greater than right
+        `<` | Left less than right
+        `>=` | Left greater than or equal to right
+        `<=` | Left less than or equal to right
+        `!` | Unary operation, returns opposite truthy/falsy value for an expression
+        `&&` | Left and right are both truthy, AND operation
+        `||` | Left or right is truthy, OR operation
+        @end
+
+    ***** Conditions always evaluate
+
+          Processing of conditionals is not exactly standard. While most languages will only ever
+          process a condition until it finds a true value, `obl` will process /every/ condition
+          until it finds a way to exit the condition, whether this is the end of the condition or a
+          return statement. This means that scripts will produce runtime errors and even crash the
+          game if you develop a condition with features that might return null values:
+
+          @code obse
+          scn ConditionalProblem
+          begin gamemode
+          if RefVar != 0 && RefVar.GetAV Health < 30
+            ; game will crash processing right hand condition when RefVar is empty
+          endif
+          end
+          @end
+
+          Thus the best way to manage this behavior is to nest a condition, where the possible crash
+          is contained in its own condition. The first condition uses a return statement to end the
+          script processing:
+
+          @code obse
+          scn FixedConditonalProblem
+          begin gamemode
+          if RefVar == 0
+            return
+          elseif RefVar.GetAV Health < 30
+            ; do something
+          endif
+          end
+          @end
+
+    ***** Conditions are slow to process
+
+          As conditions always process, large conditions are very slow overall. Nesting large
+          conditions is always suggested:
+
+          @code obse
+          scn LargeCondition
+          int x
+          begin gamemode
+          set x to GetFPS
+          ; first condition is the negation of what we want for our first large condition
+          if x != 60
+            return
+          elseif
+            ; large condition
+          endif
+          end
+          @end
+          
+          Remember that return statements stops all script processing. Physical structuring of the
+          conditional within the script should be kept in mind when constructing large conditions.
+          For most ideal use, it is best to use other constructs like while statements or
+          User-Defined Functions.
+
+    ***** Truthy/Falsy Values
+
+          Values that return true are any non-zero values. Values that return false are any 0
+          values. Any empty variable is defaulted to 0 regardless of type, any filled variable is a
+          truthy value. Thus you can simply use a variable as a condition without comparing it to
+          any truthy/falsy value depending on what you want.
+
+   **** While Statement
+      
+        @code ebnf
+        whileStatement = while, [{loopBody}], loop;
+        while = "while", (expression | literal), eol, [{statement}];
+        loopBody = statement | "break" | "continue", eol;
+        loop = "loop", eol;
+        @end
+
+        @code obse
+        scn WhileLoop
+        int i
+        begin gamemode
+        while i < 10
+          printc "%g", i
+          let i += 1
+        loop
+        end
+        @end
+        
+        The while statement loops over the body of the statement as long as the condition is true.
+        The conditions are standard conditions, however they do not always evaluate like
+        conditionals do. As well, while statements will process within a script execution time. They
+        will not process per line.
+
+        Remember to have a condition that actually will return {**** Truthy/Falsy Values}[falsy]
+        eventually. The game will lock up otherwise.
+
+   ***** Break Statement
+          The break statement is a substatement. It behaves like a return statement, but within a
+          loop. It cancels the execution of the loop.
+
+   ***** Continue Statement
+          The continue statement is a substatement. It behaves like a return statement, but within a
+          loop. It stops the current execution of the loop for the next iteration.
+
+   **** ForEach Statement
+
+        @code ebnf
+        forEachStatement = forEach, [{loopBody}], loop;
+        forEach = destinationVariable, "<-", sourceContainer;
+        loopBody = statement | "break" | "continue", eol;
+        loop = "loop", eol;
+        @end
+
+        @code obse
+        scn ForEachLoop
+        array_var iter
+        string_var string
+        begin gamemode
+        let string := "string"
+        foreach iter <- string
+        print
+        loop
+        end
+        @end
+
+        The ForEach statement iterates over each value of a container type. It can iterate over:
+        strings, arrays, and references that can be physical containers. The destination variable
+        depends on the type of the source container.
+
+    ***** Array Source
+
+          For array source containers, the destination variable is a string map of 2 keys: "key" and
+          "value". "key" is the current key of the source container. "value" is the current value of
+          the source container.
+
+    ***** String Source
+
+          For string source containers, the destination variable is a string variable of the current
+          character of the string.
+
+    ***** Reference Source
+
+          For reference source containers (which contain a physical container), the destination
+          variable is a reference variable of the current item being processed. See the section on
+          Inventory References for more.
+
+          ===
+        ForEach statements can take the [Break]{***** Break Statement} and [Continue]{***** Continue Statement}.
+
+   **** User-Defined Function Return Statement
+
+        @code ebnf
+        functionValue = "SetFunctionValue", {expression}
+        @end
+
+        @code obse
+        scn FunctionReturn
+        begin funciton {}
+        SetFunctionValue 1 + 1
+        end
+        @end
+     
+        User-defined functions (UDF) can return a single value of any type. Multi-value return
+        values are packed as single arrays for return. This does not end execution of the
+        user-defined function however. The last call of `SetFunctionValue` will determine the return
+        value of the UDF
+
+        See: User-Defined Functions in Expressions for more.
+
+   **** Label Statement
+
+        @code ebnf
+        label = ("label" | "SaveIP"), [labelName];
+        labelName = identifier;
+        @end
+
+        @code obse
+        scn LabelGoTo
+        int i
+        int j
+        begin gamemode
+          ; nested for loop using label/goto
+          Label 0
+          set j to 0
+          Label 1
+          set j to ( j + 1 )
+          if ( j < 3 )
+            GoTo 1
+          endif
+          set i to ( i + 1 )
+          if ( i < 5 ) 
+            GoTo 0
+          endif
+        end
+        @end
+
+        Label statements create points in a block of a script that can be jumped back to
+        arbitrarily. The 2 keywords used are "Label" and "SaveIP", they have identical
+        functionality. The argument for a name is optional. If its not used, then using a goto
+        statement without an argument will goto the unnamed label statement. Additionally the label
+        name is under the same namespace as regular variable identifiers. Most of the same
+        limitations apply. 
+
+        The biggest difference is when using the same label name across different scripts. When a
+        script indirectly calls scripts via result scripts using `SetStage` or by calling a
+        'OnActivate' block on a scripted object, these scripts will run immediately without the
+        current script completing first. It is best to not use this feature, it is unintentional.
+
+        Label statements must be loaded into memory first, a goto statement will not find the label
+        otherwise.
+
+   **** GoTo Statement
+
+        @code ebnf
+        label = ("goto" | "RestoreIP"), [labelName];
+        labelName = identifier;
+        @end
+
+        @code obse
+        scn LabelGoTo
+        int i
+        int j
+        begin gamemode
+          ; nested for loop using label/goto
+          Label 0
+          set j to 0
+          Label 1
+          set j to ( j + 1 )
+          if ( j < 3 )
+            GoTo 1
+          endif
+          set i to ( i + 1 )
+          if ( i < 5 ) 
+            GoTo 0
+          endif
+        end
+        @end
+
+        GoTo statements return the execution of the script back to the point of the label statement
+        of label name. If no label name is provided, it goes to the unnamed label statement.
+
+   **** Game Statements
+
+        Being a video game oriented language, `obl` has many statements that update and mutate many
+        game features which only ever return null. As these return null, the compiler will not
+        compile the script unless you use OE to ignore this. This will lead to runtime errors
+        instead.
+
+        These operate like any regular function, and are typically prefixed with "Set", or are
+        otherwise self explanatory. A full list will can be found elsewhere. Generally expect to use
+        these to create side-effects.
+
+  *** Expressions
+    
+      Expressions return a value of one of the possible [Types]{*** Types}. The general forms are as so:
+
+      @code ebnf
+      expression = literal
+                 | variable  
+                 | gameFunction
+                 | userFunction
+                 | (expression, binary, expression)
+                 | (unary, expression);
+      @end
+
+      Most objects being interacted with are considered expressions and can be used directly. All
+      variable types, all literals, and function that returns any value but null are expressions.
+
+      Literals can be found in [Literals]{**** Literal Types}.
+
+   **** Associativity 
+
+        It can be assumed that all expressions in `obl` is left associative. Precedence controls
+        order of operations for expressions.
+
+   **** Variables as Expressions
+
+        Any variable type can be used in a place an expression is expected, when strict typing is
+        not a concern. If dealing with a function found in the original release of the game, use
+        [Oblivion expressions]{**** Implicit Type Forcing via OBSE Expressions (OE)}. When used as
+        expressions, variables cannot take any parameters and behave solely as placeholders for the
+        literal types.
+
+        See [Variables]{*** Variables} for how variables are declared and [Variable Types] for the types
+        available.
+
+   **** Game Expressions
+
+        `obl` has a variety of built-in functions that return values based on states in the game
+        itself. These can do a large variety of operations, but the general form of a game function
+        is like so:
+
+        @code ebnf
+        gameFunction = function, [{expression}] | [{ '(', {expression} ')' }];
+        @end
+
+        For functions that can take a parameter, any expression is possible. However, parentheses must
+        be used to distinguish groups of expressions.
+
+        @code obse
+        scn GameFunctionExpressions
+        int x
+        ref refVar
+        begin gamemode
+        let refVar := PlayerREF
+        let x := GetActorMinLevel PlayerREF ; parameter is a literal
+        let x := GetActorMinLevel refVar ; paramater is a variable
+        let x := GetActorMinLevel GetSelf ; paramater is another function
+        let x := GetActorMinLevel (Anusai.GetNthDetectedActor 0) ; parameter is a grouped expression
+        end
+        @end
+
+   **** Arithmetic Operators
+
+        `obl` supports a number of standard arithmetic operators. Operators are symbols, either
+        unary or binary that combine 1 or more identifiers into an expression.
+
+        @table
+        Operator | Type | Use | Precedence
+        -
+        `+` | Binary | Addition | 9
+        `-` | Binary | Subtraction | 9
+        `*` | Binary | Multiplication | 10
+        `/` | Binary | Division | 10
+        `^` | Binary | Exponentiation | 11
+        `%` | Binary | Integer modulo | 10
+        @end
+
+        > Integer modulo takes the integer remainder of the division factor.
+
+    ***** Type Conversion
+
+          Math can be performed between either number type at will, but the output variable will
+          determine how it gets stored. When storing a floating point result as an integer, the
+          decimal portion will be truncated without rounding.
+
+   **** Math Functions
+
+        In addition to the base arithmetic operators, `obl` also supports additional math functions.
+
+    ***** Abs
+
+          Return the absolute value of the argument, truncates floats.
+          `(abs:float) abs arg:float`
+
+    ***** Ceil
+
+          Returns the nearest integer above the argument.
+          `(ceil:float) ceil arg:float`
+
+    ***** Exp
+
+          Returns the result of e, the natural number, to the power of the argument.
+          `(exp:float) exp arg:float`
+
+    ***** Floor
+
+          Returns the nearest integer below the argument.
+          `(floor:float) floor arg:float`
+
+    ***** Fmod
+
+          Returns the floating point modulo of the dividend in the base. The optional offset shifts
+          the range of the result by adding that value to the base.
+
+          This function can be generally defined in the following form:
+          `modulus n base := n - base * (floor (n / base))`.
+
+          This will produce a result that can be defined in the range of:
+            `0 <= result < base`
+            `offset <= result < base + offset`
+          when the base is positive and
+            `0 >= result > base`
+            `offset >= result > base + offset`
+          when the base is negative.
+          `(fmod:float) fmod dividend:float base:float offset:float`
+
+    ***** Log
+
+          Returns the natural log of the argument.
+          `(log:float) log arg:float`
+
+    ***** Log10
+
+          Returns the log of base 10 of the argument.
+          `(log10:float) log10 arg:float`
+
+    ***** Pow
+
+          Returns the result of the base raised to the exponent.
+          `(pow:float) pow base:float exponent:float`
+
+    ***** Rand
+
+          #contexts language-reference test math
+          - [ ] see if rand is inclusive
+           - [ ] see if rand is a float
+          Returns a random number between the two arguments, inclusive.
+          `(rand:float) rand min:float max:float`
+
+    ***** GetRandomPercent
+
+          #contexts language-reference formatting
+          - [?] mark soft deprecated functions?
+          Returns a random number between 0 and 99 inclusive.
+          `(GetRandomPercent:int) GetRandomPercent`
+
+          Note that this function was originally the only available random function in `obl`. It
+          should not be used when working with new code.
+
+    ***** SquareRoot
+
+          #contexts language-reference formatting
+          - [ ] think about formatting for aliases here
+          Returns the square root of the argument.
+          `(SquareRoot:float) SquareRoot arg:float`
+          `(sqrt:float) sqrt arg:float`
+
+   **** Trigonometric Functions
+
+        Standard trig functions are available, the default functions use degrees instead of radians.
+        Radian specific functions are designated with a 'R' as a prefix. All trig functions have an
+        alias with a 'D' as a prefix, to better distinguish that the degrees form is used.
+
+    ***** ACos
+
+          Returns the arccosine of the argument.
+          `(acos:float) acos arg:float`
+          `(acos:float) dacos arg:float`
+          `(acos:float) racos arg:float`
+
+    ***** ASin
+
+          Returns the arcsine of the argument.
+          `(asin:float) asin arg:float`
+          `(asin:float) dasin arg:float`
+          `(asin:float) rasin arg:float`
+
+    ***** ATan
+
+          Returns the arctangent of the argument.
+          `(atan:float) atan arg:float`
+          `(atan:float) datan arg:float`
+          `(atan:float) ratan arg:float`
+
+    ***** ATan2
+
+          Returns the arctangent of the arguments, an expanded vector form.
+          `(atan:float) atan2 arg1:float arg2:float`
+          `(atan:float) datan2 arg1:float arg2:float`
+          `(atan:float) ratan2 arg1:float arg2:float`
+
+          See the section on [Linear Algebra]{**** Linear Algebra} for vectors forms.
+
+    ***** Cos
+
+          Returns the cosine of the argument.
+          `(cos:float) cos arg:float`
+          `(cos:float) dcos arg:float`
+          `(cos:float) rcos arg:float`
+
+    ***** CosH
+
+          Returns the hyperbolic cosine of the argument.
+          `(cosh:float) cosh arg:float`
+          `(cosh:float) dcosh arg:float`
+          `(cosh:float) rcosh arg:float`
+
+    ***** Sin
+
+          Returns the sine of the argument.
+          `(sin:float) sin arg:float`
+          `(sin:float) dsin arg:float`
+          `(sin:float) rsin arg:float`
+
+    ***** SinH
+
+          Returns the hyperbolic sine of the argument.
+          `(sinh:float) sinh arg:float`
+          `(sinh:float) dsinh arg:float`
+          `(sinh:float) rsinh arg:float`
+
+    ***** Tan
+
+          Returns the tangent of the argument.
+          `(tan:float) tan arg:float`
+          `(tan:float) dtan arg:float`
+          `(tan:float) rtan arg:float`
+
+    ***** TanH
+
+          Returns the hyperbolic tangent of the argument.
+          `(tanh:float) tanh arg:float`
+          `(tanh:float) dtanh arg:float`
+          `(tanh:float) rtanh arg:float`
+
+   **** Bitwise Operations
+        #contexts language-reference core documentation
+        - [ ] explain bitwise operations
+
+        `obl` supports standard bitwise operations, with the caveat that no new type for binary
+        numbers being added. Manual conversion between binary and decimal must be performed.
+
+        There are a number of bitwise operators:
+        @table
+        Operator | Type | Function | Precedence
+        `>>` | Binary | Left Shift | 8
+        `<<` | Binary | Right Shift | 8
+        `&` | Binary | Logical AND | 7
+        `|` | Binary | Logical OR | 6
+        @end
+
+        > Note the lack of logical XOR and logical NOT binary operators
+
+        As well there are a number of bitwise functions, mostly mirrors of these operators:
+
+    ***** LeftShift
+
+          Returns argument shifted left by number of bits. Returns zero if shift amount is greater
+          than 32.
+          `(LeftShift:int) LeftShift arg:int bits:int`
+
+    ***** RightShift
+
+          Returns argument shifted right by number of bits. Returns zero if shift amount is greater
+          than 32.
+          `(RightShift:int) RightShift arg:int bits:int`
+
+    ***** LogicalAND
+
+          Returns the logical AND of the two arguments.
+          `(LogicalAND:int) LogicalAND arg1:int arg2:int`
+
+    ***** LogicalOR
+
+          Returns the logical OR of the two arguments.
+          `(LogicalOR:int) LogicalOR arg1:int arg2:int`
+
+    ***** LogicalNOT
+
+          Returns the logical NOT of the two arguments.
+          `(LogicalNOT:int) LogicalNOT arg1:int arg2:int`
+
+    ***** LogicalXOR
+
+          Returns the logical XOR of the two arguments.
+          `(LogicalXOR:int) LogicalXOR arg1:int arg2:int`
+
+   **** Linear Algebra
+        #contexts language-reference core documentation
+        - [?] explain linear algebra somewhat
+
+        `obl` supports linear algebra directly, using the array type of type array to create vectors
+        and matrices. Matrices and vectors must always have numbers. Any other type is an error.
+
+    ***** Matrix
+
+          Matrices are internally 2 dimensional, stored as nested arrays where the
+          elements of the outer array are the rows of the matrix. Therefore, in `A[i][j]`, the
+          'j_^th^' element is the current index of the 'i_^th^' row.
+
+          Matrices must either be 1 or 2 dimensional. A 1 dimensional matrix is simply an unnested
+          array. A 2 dimensional matrix can only have 1 row to function as a 1D matrix. All rows must
+          have the same length to be a valid 2D matrix.
+
+          Some functions expect a "square" matrix, that is a matrix where the number of columns and
+          rows are equal. This can be described as the size of the first array being equal to the size
+          of one of the second, nested, arrays. Since matrices must have equal rows regardless,
+          additional processing is not needed unless one is constructing a matrix programmatically.
+
+          @code obse
+          scn SquareMatrix
+          int columnSize
+          int rowSize
+          begin gamemode
+          let columnSize := ar_Size matrix
+          let rowSize := ar_Size matrix[i]
+          if columnSize == rowSize
+            print "mkkatrix is square"
+          endif
+          end
+          @end
+
+      ****** GenerateZeroMatrix
+
+             Returns a matrix of the size specified by the arguments, with each element filled with
+             zero.
+             `(zeroMatrix:array) GenerateZeroMatrix height:int width:int`
+             `(zeroMatrix:array) zeromat height:int width:int`
+
+      ****** GenerateIdentityMatrix
+
+             Returns a square matrix with each element along the diagonal, top-left to bottom-right,
+             filled with 1 and every other element filled with 0.
+             `(identityMatrix:array) GenerateIdentityMatrix size:int`
+             `(identityMatrix:array) identitymat size:int`
+
+      ****** GenerateRotationMatrix
+            
+             Returns a 3x3 square matrix that can serve as a rotation matrix about the specified
+             axis. Rotation matrixes are always invertible, and their inverse is equal to their
+             transpose.
+              #contexts language-reference core test
+              - [ ] find out what axis is
+             `(rotationMatrix:array) GenerateRotationMatrix axis:axis angle:float`
+             `(rotationMatrix:array) rotmat axis:axis angle:float`
+
+      ****** MatrixTrace
+
+             Returns the trace of a square matrix, the sum of elements along the diagonal (top-left
+             to bottom-right).
+             `(trace:float) MatrixTrace matrix:array`
+             `(trace:float) tr matrix:array`
+
+             Note that this function returns 0 if it is passed a non-square matrix, not the null
+             type. It is up to the user to make sure that a square matrix is passed.
+
+      ****** MatrixDeterminant
+
+             Returns the determinant of a square matrix.
+             `(determinant:float) MatrixDeterminant matrix:array`
+             `(determinant:float) det matrix:array`
+
+             Note that this function returns 0 if it is passed a non-square matrix, not the null
+             type. It is up to the user to make sure that a square matrix is passed.
+
+      ****** MatrixRREF
+             
+             Returns the reduce row echelon form (RREF) of a matrix.
+             `(rref:array) MatrixRREF matrix:array`
+             `(rref:array) rref matrix:array`
+
+      ****** MatrixInvert
+
+             Returns the inverse matrix of a matrix. Returns 0 if a matrix is not invertible.
+             `(inverseMatrix:array) MatrixInvert matrix:array`
+             `(inverseMatrix:array) matinv matrix:array`
+
+      ****** MatrixTranspose
+
+             Returns the transpose of a matrix. The rows a matrix becomes the columns of its
+             transpose.
+             `(transposeMatrix:array) MatrixTranspose matrix:array`
+             `(transposeMatrix:array) transpose matrix:array`
+
+      ****** MatrixScale
+
+             Returns a matrix where each element is scaled by a number.
+             `(scaledMatrix:array) MatrixScale scalar:float matrix:array`
+             `(scaledMatrix:array) matscale scalar:float matrix:array`
+
+      ****** MatrixAdd
+
+             Returns the sum of two matrices. Matrices are summed by adding each element at each
+             position. The matrices must have the same dimensions.
+             `(matrixSum:array) MatrixAdd addend:array`
+             `(matrixSum:array) matadd addend:array`
+
+      ****** MatrixSubtract
+
+             Returns the difference of two matrices. Matrices are subtracted by taking the
+             difference of each element at each position. The matrices must have the same
+             dimensions.
+             `(matrixDiff:array) MatrixSubtract minuend:array`
+             `(matrixDiff:array) matsubtract minuend:array`
+
+      ****** MatrixMultiply
+
+             Returns the product of two matrices. Matrix multiplication is not commutative, order of
+             multiplication matters. The product of matrix A and matrix B does not equal matrix B
+             and A. The width of the first matrix must be equal to the height of the second matrix.
+             `(matrixProduct:array) MatrixMultiply matrix:array matrix:array`
+             `(matrixProduct:array) matmult matrix:array matrix:array`
+
+             Two 1D arrays cannot be multiplied since a row vector multiplied by a column vector is
+             different than a column vector multiplied by a row vector. This is an ambiguity that is
+             solved by {****** ForceRowVector} and {****** ForceColumnVector}. Process one or both
+             with these functions to remove the ambiguity.
+
+    ***** Vector
+          Vectors can be defined in 3 ways:
+          ~ A 1D array {| 1D Vectors}
+          ~ A 2D array with 1 row {| Row Vector}
+          ~ A 2D array where each row only has 1 element {| Column Vector}
+
+          | 1D Vectors
+          1D vectors can be ambiguous, use {****** ForceRowVector} or {****** ForceColumnVector} if no
+          ambiguity is allowed
+
+          | Row Vector
+          Type 2 is a row vector
+
+          | Column Vector
+          Type 3 is a column vector
+
+      ****** ForceRowVector
+
+             Takes a 1D array and returns an equivalent 2D array where the outer array's only
+             element is the 1D array (`vector[0][j] == v[j]`). This is used where row vectors are
+             needed.
+             `(rowVector:arrays) ForceRowVector vector:array`
+             `(rowVector:arrays) rowvec vector:array`
+
+             Note that row vectors require only 2 array variables as opposed to the n+1 array
+             variables needed for column vectors. Row vectors are therefore preferred if at all
+             possible.
+
+      ****** ForceColumnVector
+
+             Takes a 1D array and returns an equivalent 2D array where the outer array's elements
+             are each arrays with only 1 element - each element in the 1D array (`vector[i][0] ==
+             v[i]`). This is used when column vectors are needed.
+             `(columnVector:arrays) ForceColumnVector vector:array`
+             `(columnVector:arrays) colvec vector:array`
+
+             Note that row vectors require only 2 array variables as opposed to the n+1 array
+             variables needed for column vectors. Row vectors are therefore preferred if at all
+             possible.
+
+      ****** VectorMagnitude
+
+             Returns the magnitude of a vector, the square-root of the sum of the squares of its
+             elements.
+             `(magnitude:float) VectorMagnitude vector:array`
+             `(magnitude:float) vecmag vector:array`
+
+      ****** VectorNormalize
+
+             Returns the normalized version of a vector, where each entry of the vector is divided
+             by the magnitude. A normalized vector has a magnitude of 1.
+             `(normVector:array) VectorNormalize vector:array`
+             `(normVector:array) vecnorm vector:array`
+
+      ****** VectorDot
+
+             Returns the dot/scalar product of two vectors. The vectors must have the same length.
+             `(dotProduct:float) VectorDot vector:array vector:array`
+             `(dotProduct:float) dot vector:array vector:array`
+
+             Note that this function will return 0 upon failure not the null type, which is usually
+             the result of taking the dot product of vectors of different sizes. The user should
+             make sure that the vectors are of the same size when using this function.
+
+      ****** VectorCross
+
+             Returns the cross/vector product of two vectors. The vectors must have the same length.
+             `(crossProduct) VectorCross vector:array vector:array`
+             `(crossProduct) cross vector:array vector:array`
+
+   **** Arrays
+
+        Arrays are containers. They can store any of the [Literals] types, plus another array. They
+        are very similar to most language containers, like Lua tables and C++ vectors. See
+        [Array Types]{***** Arrays} for the 3 types of arrays available. Conversion between these
+        types is not possible. Additionally, arrays in `obl` are always ordered.
+        
+        Arrays must be explicitly defined within their scope if not passing the return value of a
+        function. This determines the type of array container.
+
+        @code obse
+        scn ArrayDeclare
+        array_var arrayVar
+        begin gamemode
+        let arrayVar := ar_Construct Array
+        ; arrayVar is now an array
+        let arrayVar := ar_Construct Map
+        ; arrayVar is now a map
+        let arrayVar := ar_Construct StringMap
+        ; arrayVar is now a string map
+        end
+        @end
+
+        Generally arrays can be processed in 2 manners: [While Loops]{**** While Statement} and 
+        [ForEach Loops]{**** ForEach Statement}. Both have upsides and should be considered.
+
+    ***** Using While Loops to Iterate Arrays
+
+          A while statement is a very simple construct. It loops until an expression is false.
+          Because of this, it is very fast. A simple loop over an array can be significantly faster
+          than a foreach loop. However, it can only successfully iterate over the array type "array"
+          (i.e. 0-indexed arrays). It is impossible to iterate over "StringMaps", and while regular
+          "Map" style can be iterated on it is only possible on the valid numerical keys of the
+          map array. 
+
+          @code obse
+          scn WhileIteration
+          array_var arrayType
+          array_var mapType
+          int iter
+          begin gamemode
+          ; assume that var arrayType is filled with the values of 0-19 inclusive
+          ; 0, 1, 2, ... 18, 19
+          let iter := 0
+          while iter < (ar_Size arrayType)
+            printc "current value is: %g", arrayType[iter]
+            let iter += 1
+          loop
+          ; assume that mapType is filled with keys of even values between 0 and 20 inclusive
+          ; 0, 2, 4, ... 16, 18, 20
+          let iter := 0
+          while iter <= (ar_Size mapType)
+            printc "current value is: %g", mapType[iter]
+            let iter += 2
+          loop
+          end
+          @end
+
+    ***** Using ForEach Loops to Iterate Arrays
+
+          ForEach loops can be used to directly iterate over each value of any array type. Like most
+          languages with the foreach statement, a destination variable is used that contains the
+          information needed. In `obl` that destination variable is itself an array. See the section
+          on destination containers in [ForEach Statements]{**** ForEach Statement} for all 3 types
+          that can use the foreach loop. This destination variable is only valid for the current
+          iteration.
+
+          For arrays themselves, it does not matter what type the source array can be. The
+          destination container will always contain 2 indices:
+          - "key": the current index in the loop
+          - "value": the current value of index "key"
+
+          @code obse
+          scn ForEachIteration
+          array_var arrayType
+          array_var mapType
+          array_var stringMapType
+          array_var iter
+          int tempInt
+          string_var tempString
+          begin gamemode
+          ; assume that var arrayType is filled with the values of 0-19 inclusive
+          ; 0, 1, 2, ... 18, 19
+          foreach iter <- arrayType
+            let tempInt := iter["key"]
+            printc "key is: %g", tempInt
+            let tempInt := iter["value"]
+            printc "value is: %g", tempInt
+          loop
+          ; assume that mapType is filled with keys of even values between 0 and 20 inclusive
+          ; 0, 2, 4, ... 16, 18, 20
+          foreach iter <- mapType
+            let tempInt := iter["key"]
+            printc "key is: %g", tempInt
+            let tempInt := iter["value"]
+            printc "value is: %g", tempInt
+          loop
+          ; assume that stringMapType is filled with keys of the letters a through z
+          ; a, b, c, ... y, z
+          foreach iter <- stringMapType
+            let tempString := iter["key"]
+            printc "key is: %z", tempInt
+            let tempInt := iter["value"]
+            printc "value is: %g", tempInt
+          loop
+          end
+          @end
+
+          Note that we need to pass off the subscripted destination array. This is related to
+          typing, and is a case where it can fail even with OEs.
+
+    ***** Slice/Range Notation
+
+          Arrays can be addressed over a range of valid index values:
+
+          @code ebnf
+          sliceRange = {literal}, ':', {literal};
+          @end
+
+          @code obse
+          scn SliceRange
+          array_var arrayVar
+          array_var iter
+          begin gamemode
+          ; if array is of size 9
+          foreach iter <- arrayVar[2:7]
+          ; indices  2-7 are iterated
+          loop
+          foreach iter <- arrayVar[:8]
+          ; indices up to and including 8 are iterated
+          loop
+          foreach iter <- arrayVar[3:-2]
+          ; indices from 3 to the second from last are iterated
+          loop
+          ; if array is a map that contains the even values between 0-10
+          foreach iter <- arrayVar[3:7]
+          ; indices 4 and 6 are iterated
+          loop
+          ; if array is a stringmap that has the keys "begin", middle, and "end"
+          foreach iter <- arrayVar["begin":"end"]
+          ; indices >= "begin" and <= "end" are iterated
+          loop
+          end
+          @end
+
+          A number of things are of note here:
+          ~ Array type doesn't matter
+          ~ Only one range needs to be used
+          ~ Negative values work from the reverse for array type
+          ~ Numerical value of strings is used
+
+    ***** ar_Construct
+
+          Creates and returns a new empty array of the specified type:
+          ~ Array
+          ~ Map
+          ~ StringMap
+          `(array_var) ar_Construct arrayType:type`
+
+    ***** ar_Size
+
+          Returns the number of elements in an array, or -1 for uninitialized arrays.
+          `(array_var) ar_Size array:array_var`
+
+    ***** ar_Dump
+
+          Prints the contents of the array, key and value, to the console.
+          `(null) ar_Dump array:array_var`
+
+    ***** ar_DumpID
+
+          Like ar_Dump but accepts an array ID instead.
+          `(null) ar_DumpID arrayID:int`
+
+    ***** ar_Erase
+
+          Erases all elements in an array, a single element, or a range using
+          [Slice/Range Notation]{***** Slice/Range Notation}. Returns the number of elements
+          removed.
+          `(removed:int) ar_Erase target:array_var`
+          `(removed:int) ar_Erase target:array_var[index:arrayIndex]`
+          `(removed:int) ar_Erase target:array_var[sliceRange]`
+
+    ***** ar_Find
+
+          Locates the first value in an array of the specified value, and returns the key associated
+          with it. Accepts a range. Returns an empty string for StringMaps or -99999.0 for numerical
+          arrays when no value is found.
+          `(index:arrayIndex) ar_Find value:Literal sourceArray:array_var`
+          `(index:arrayIndex) ar_Find value:Literal sourceArray:array_var[sliceRange]`
+
+    ***** ar_Sort
+
+          Sorts in ascending order and returns the specified array of type array. Keys associated
+          with these values are lost. All elements must be the same type. If not, then an empty
+          array is returned. An optional truthy value uses descending order.
+          ~ Strings are sorted alphabetically and case-insensitively
+          ~ Numbers are sorted numerically
+          ~ Objects are sorted by FormID
+          `(sorted:array_var) ar_Sort source:array_var descend:bool`
+
+    ***** ar_SortAlpha
+
+          Sorts in ascending order and returns the specified array of type array. Keys associated
+          with these values are lost. Converts all values to strings temporarily, then sorts
+          alphabetically and case-insensitively. An optional truthy value uses descending order.
+          `(sorted:array_var) ar_SortAlpha source:array_var descend:bool`
+
+    ***** ar_Copy
+
+          Creates and returns a copy of the source array, making references to any nested arrays.
+          `(copy:array_var) ar_Copy source:array_var`
+
+    ***** ar_DeepCopy
+
+          Like `ar_Copy` but nested arrays are also copied.
+          `(copy:array_var) ar_Copy source:array_var`
+
+          #contexts language-reference documentation test
+          - [ ] see if first/last works for all types
+
+    ***** ar_First
+
+          Returns the key of the first element of an array.
+          `(index:arrayIndex) ar_First source:array_var`
+
+    ***** ar_Last
+
+          Returns the key of the last element of an array.
+          `(index:arrayIndex) ar_Last source:array_var`
+
+    ***** ar_BadNumericIndex
+
+          Returns a constant representing the invalid numerical index. Used for comparing to the
+          return value of array functions.
+          `(badIndex:int) ar_BadNumericIndex`
+
+    ***** ar_BadStringIndex
+
+          Like `ar_BadNumericIndex` but for StringMaps.
+          `(badIndex:int) ar_BadStringIndex`
+
+    ***** ar_Next
+
+          Returns the key of the element immediately following the specified key. Returns the bad
+          index constant if no key follows.
+          `(nextIndex:arrayIndex) ar_Next source:array_var index:arrayIndex`
+
+    ***** ar_Prev
+
+          Returns the key of the element immediately preceding the specified key. Returns the bad
+          index constant if no key follows.
+          `(prevIndex:arrayIndex) ar_Prev source:array_var index:arrayIndex`
+
+    ***** ar_Keys
+
+          Returns an array of type array containing all of the keys of the source array.
+          `(array:array_var) ar_Keys source:array_var`
+
+    ***** ar_HasKeys
+
+          Returns true if array has an element with the specified key.
+          `(hasKey:bool) ar_HasKey source:array_var index:arrayIndex`
+
+    ***** ar_List
+
+          Taking up to 20 arguments of any type, returns an array of type array containing those
+          elements in the order in which they were passed. Separation of arguments is optionally
+          comma separated (and encouraged).
+          `(list:array_var) ar_List arg1:literal arg2:literal ... arg20:literal`
+
+    ***** ar_Map
+          #contexts language-reference documentation
+          - [ ] describe key-value pairs somewhere
+
+          Returns a Map or StringMap given up to 20 key-value pairs. Keys must be either numbers or
+          strings, values can be any value.
+          `(Map/StringMap) ar_Map keyValue1 keyValue2 ... keyValue20`
+
+          > Note that the rest of these functions only apply to arrays of type array
+
+    ***** ar_Resize
+
+          Resizes an array that is resized to the specified size. If the new array is smaller,
+          values outside of that array are lost. If the new array is bigger, new values are used. 0
+          is the default, but the padding values can be specified. Returns true if successful, false
+          otherwise.
+          `(resized:bool) ar_Resize source:array_var size:int paddingValue:multi`
+
+    ***** ar_Insert
+          
+          Inserts a single element into an array at the index. Index must be inside the array.
+          Elements above the index are shifted up by 1 index. Returns true on success, false
+          otherwise.
+          `(inserted:bool) ar_Insert source:array_var index:arrayIndex value:multi`
+
+    ***** ar_InsertRange
+          
+          Inserts a range of elements into an array at the index. Index must be inside the array.
+          Elements above the index are shifted up by the number of elements inserted. Returns true
+          on success, false otherwise.
+          `(inserted:bool) ar_Insert source:array_var index:arrayIndex range:array_var`
+
+    ***** ar_Range
+
+          Returns an array of 0 or more numbers within the inclusive start and end ranges, on the
+          optional interval specified, otherwise 1. This allows one to mimic traditional for loops
+          using the foreach loop.
+          `(range:array_var) ar_Range start:int end:int step:int`
+
+    ***** ar_Append
+
+          Appends value to array.
+          `(null) ar_Append source:array_var value:value`
+
+    ***** ar_CustomSort
+
+          Returns an array sorted by the called sorting function. The function takes 2 array_var
+          arguments. When called, the arguments contain 1 element each - the values being compared.
+          The function returns false if the first argument is less than the second argument and true
+          if the first is greater than or equal to the second.
+
+          These terms are general, and are only there to provide sorting. Care must be taken to
+          provide a definitive ordering of your array. Otherwise this function will never terminate.
+
+          The optional bool can set sorting to reverse.
+          `(sorted:array_var) ar_CustomSort source:array_var comparisonFunction:ref descend:bool`
+
+
+#comment
+vim:tw=100:ft=norg:norl:
