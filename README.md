@@ -5,6 +5,22 @@ This reference is written currently in Neorg, and thus must be read in said plug
 # Status
 This reference is incomplete. It is not recommended for use
 
+## Progress
+- [x] Structure
+- [x] Statements
+- [-] Arrays
+- [ ] Strings
+- [-] Math
+- [ ] User Interaction
+- [ ] User Defined Functions
+- [ ] Event Handlers
+- [ ] Object Functions
+  - [ ] Inventory References
+  - [ ] Types
+  - [ ] OOP-Like Model
+- [ ] User-Interface
+- [ ] Physics
+
 # Contributing
 If you'd like to contribute, you have to use Neorg or make an issue with the changes. Neorg is a more sane markup language for the scope of this project
 
