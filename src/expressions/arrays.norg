@@ -17,7 +17,7 @@
   Arrays must be explicitly defined within their scope if not passing the return value of a
   function. This determines the type of array container.
 
-@code obse
+  @code obse
   scn ArrayDeclare
   array_var arrayVar
   begin gamemode
@@ -28,7 +28,7 @@
   let arrayVar := ar_Construct StringMap
   ; arrayVar is now a string map
   end
-@end
+  @end
 
   Generally arrays can be processed in 2 manners: [While Loops]{**** While Statement} and 
   [ForEach Loops]{**** ForEach Statement}. Both have upsides and should be considered.
