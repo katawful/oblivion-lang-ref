@@ -7,65 +7,63 @@
   version: 0.0.11
 @end
 
-  *** Expressions
-    
-      Expressions return a value of one of the possible [Types]{*** Types}. The general forms are as so:
+* Expressions
 
-      @code ebnf
-      expression = literal
-                 | variable  
-                 | gameFunction
-                 | userFunction
-                 | (expression, binary, expression)
-                 | (unary, expression);
-      @end
+  Expressions return a value of one of the possible [Types]{*** Types}. The general forms are as so:
 
-      Most objects being interacted with are considered expressions and can be used directly. All
-      variable types, all literals, and function that returns any value but null are expressions.
+  @code ebnf
+  expression = literal
+             | variable  
+             | gameFunction
+             | userFunction
+             | (expression, binary, expression)
+             | (unary, expression);
+  @end
 
-      Literals can be found in [Literals]{**** Literal Types}.
+  Most objects being interacted with are considered expressions and can be used directly. All
+  variable types, all literals, and function that returns any value but null are expressions.
 
-   **** Associativity 
+  Literals can be found in [Literals]{**** Literal Types}.
 
-        It can be assumed that all expressions in `obl` is left associative. Precedence controls
-        order of operations for expressions.
+ ** Associativity 
 
-   **** Variables as Expressions
+    It can be assumed that all expressions in `obl` is left associative. Precedence controls order
+    of operations for expressions.
 
-        Any variable type can be used in a place an expression is expected, when strict typing is
-        not a concern. If dealing with a function found in the original release of the game, use
-        [Oblivion expressions]{**** Implicit Type Forcing via OBSE Expressions (OE)}. When used as
-        expressions, variables cannot take any parameters and behave solely as placeholders for the
-        literal types.
+ ** Variables as Expressions
 
-        See [Variables]{*** Variables} for how variables are declared and [Variable Types] for the types
-        available.
+    Any variable type can be used in a place an expression is expected, when strict typing is not a
+    concern. If dealing with a function found in the original release of the game, use [Oblivion
+    expressions]{**** Implicit Type Forcing via OBSE Expressions (OE)}. When used as expressions,
+    variables cannot take any parameters and behave solely as placeholders for the literal types.
 
-   **** Game Expressions
+    See [Variables]{*** Variables} for how variables are declared and [Variable Types] for the types
+    available.
 
-        `obl` has a variety of built-in functions that return values based on states in the game
-        itself. These can do a large variety of operations, but the general form of a game function
-        is like so:
+ ** Game Expressions
 
-        @code ebnf
-        gameFunction = function, [{expression}] | [{ '(', {expression} ')' }];
-        @end
+    `obl` has a variety of built-in functions that return values based on states in the game itself.
+    These can do a large variety of operations, but the general form of a game function is like so:
 
-        For functions that can take a parameter, any expression is possible. However, parentheses must
-        be used to distinguish groups of expressions.
+    @code ebnf
+    gameFunction = function, [{expression}] | [{ '(', {expression} ')' }];
+    @end
 
-        @code obse
-        scn GameFunctionExpressions
-        int x
-        ref refVar
-        begin gamemode
-        let refVar := PlayerREF
-        let x := GetActorMinLevel PlayerREF ; parameter is a literal
-        let x := GetActorMinLevel refVar ; paramater is a variable
-        let x := GetActorMinLevel GetSelf ; paramater is another function
-        let x := GetActorMinLevel (Anusai.GetNthDetectedActor 0) ; parameter is a grouped expression
-        end
-        @end
+    For functions that can take a parameter, any expression is possible. However, parentheses must
+    be used to distinguish groups of expressions.
+
+    @code obse
+    scn GameFunctionExpressions
+    int x
+    ref refVar
+    begin gamemode
+    let refVar := PlayerREF
+    let x := GetActorMinLevel PlayerREF ; parameter is a literal
+    let x := GetActorMinLevel refVar ; paramater is a variable
+    let x := GetActorMinLevel GetSelf ; paramater is another function
+    let x := GetActorMinLevel (Anusai.GetNthDetectedActor 0) ; parameter is a grouped expression
+    end
+    @end
 
 #comment
 vim:tw=100:ft=norg:norl:

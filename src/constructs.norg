@@ -7,14 +7,14 @@
   version: 0.0.11
 @end
 
- ** Essential Constructs
+* Essential Constructs
 
-  *** Loose Language
+  ** Loose Language
 
       `obl` is completely case insensitive, and is also whitespace insensitive (assuming constructs
       are completed within their line).
 
-  *** Literal Language
+  ** Literal Language
 
       `obl` is a literal language, and thus everything must be declared within the language file.
       While the scripts written can be attached to game objects, or used as their own functions, the
@@ -32,7 +32,7 @@
       scn ThisIsTheName
       @end
 
-   **** Identifiers
+   *** Identifiers
 
         It is not know the extent to which ASCII characters are allowed in `obl` for identifiers.
         There is a distinct difference between, for instance, script names and variable names that
@@ -42,7 +42,7 @@
         game may attempt to process the script name as a number. If one wishes to set their script
         name apart from others alphanumerically, it is better to only use a alphabetical prefix.
 
-  *** Script Body
+  ** Script Body
 
       `obl` can not run functions arbitrarily. As it is a game-oriented language, the scripts run in
       certain game-specific blocks. Everything outside is top-level script information.
@@ -65,17 +65,17 @@
       end
       @end
 
-      See ["Begin" Blocks]{*** "Begin" Blocks} and [Variable Declarators]{*** Variable Declarators} for more information on top-level
-      information.
+      See ["Begin" Blocks]{*** "Begin" Blocks} and [Variable Declarators]{*** Variable Declarators}
+      for more information on top-level information.
 
-  *** Script Type
+  ** Script Type
 
       While not a part of the language spec itself, `obl` language files when brought into the
       game's development tools can be defined as one of 3 types: "Quest Script", "Object Script",
       and "Magic Effect Script", with "Object Script" being the default. More details about these
       will be discussed in [Script Types]{** Script Types}.
 
-  *** Static Typing by Assumption
+  ** Static Typing by Assumption
 
       `obl` is technically dynamically typed. There are a lot of scenarios where the compiler does
       keep static typing, however there are an equal amount of times where a runtime error will
@@ -94,7 +94,7 @@
       Thus typing can be dynamic with intervention. For the ease of development, it is best to
       assume that typing is static. The exact reasons why this is the case will be discussed later.
 
-  *** Manifest Typing
+  ** Manifest Typing
 
       Types are declared explicitly in `obl`, and therefore variables cannot change type inside
       their scope:
@@ -110,13 +110,13 @@
       end
       @end
 
-  *** Strong/Weak Typing
+  ** Strong/Weak Typing
 
       `obl` has a mix of strong and weak typing. It is similar to implicitly typed languages like
       Lua and Javascript, where some types can be converted (i.e.: `let x = 1 + "hi"`), however the
       scenarios in which implicit type conversion actually happens is limited. 
 
-   **** Implicit Type Forcing via OBSE Expressions (OE)
+   *** Implicit Type Forcing via OBSE Expressions (OE)
 
         As `obl` has been expanded by community efforts via OBSE, new data types have been
         introduced. In order to directly integrate itself with the features available in the
@@ -135,7 +135,7 @@
         Note that OE also overlaps with parentheses for operation ordering. This might lead to
         unexpected behavior if one is unaware.
 
-   **** Compile with OBSE Expressions Enabled (COEE)
+   *** Compile with OBSE Expressions Enabled (COEE)
 
         Any expression can be attempted to be evaluated with OE. If more direct control is needed,
         you can compile with OBSE expressions enabled for everything:
