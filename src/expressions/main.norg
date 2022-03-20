@@ -65,5 +65,10 @@
     end
     @end
 
+ ** Available Expressions
+
+    {:expressions/math:}[Math Functions]
+    {:expressions/arrays:}[Array Functions]
+
 #comment
 vim:tw=100:ft=norg:norl:

@@ -28,5 +28,19 @@
   syntax, this documentation will simply be assuming the features provided with the original game
   are not solely valid. Any problems related to that will be discussed as they arrive.
 
+  {:notation:}[Language Notation]
+  {:constructs:}[General Language Constructs]
+
+ ** Language
+
+    {:language/lexical:}[Lexical Conventions]
+    {:language/operators:}[Operators]
+    {:language/Types:}[Available Types]
+    {:language/script-types:}[Script Types]
+    {:language/variables:}[Variable Types]
+    {:language/statements:}[Language Statements]
+
+    {:expressions/main:}[Main Details]
+
 #comment
 vim:tw=100:ft=norg:norl:
