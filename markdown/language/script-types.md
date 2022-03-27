@@ -1,10 +1,3 @@
-  title: script-types
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Script Types
 Any script can be 1 of 3 types: Quest, Object, and Magic Effect alongside user-defined functions.
 
@@ -66,4 +59,3 @@ behaves exactly. These scripts are mostly designed to run on actors (NPCs and cr
 will run on actor corpses, doors, and furniture. When run on these objects, the script will run
 once.
 
-vim:tw=100:ft=norg:norl:

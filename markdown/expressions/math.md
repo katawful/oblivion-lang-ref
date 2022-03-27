@@ -1,10 +1,3 @@
-  title: math
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Arithmetic Operators
 `obl` supports a number of standard arithmetic operators. Operators are symbols, either unary or
 binary that combine 1 or more identifiers into an expression.
@@ -464,4 +457,3 @@ Returns the cross/vector product of two vectors. The vectors must have the same 
 
 `(crossProduct) cross vector:array vector:array`
 
-vim:tw=100:ft=norg:norl:

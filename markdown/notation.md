@@ -1,10 +1,3 @@
-  title: notation
-  description: General notation of obl
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Notation
 `obl` is a line-based language, i.e. each line must contain a valid execution of code. This is
 similar to scripting languages like Vimscript and Bash. However unlike those languages, constructs
@@ -30,4 +23,3 @@ Also note, for the sake of this documentation, a 'construct' will be defined as 
 of code related to this language. This definition is solely to discuss all aspects of the language
 in a more concise manner.
 
-vim:tw=100:ft=norg:norl:

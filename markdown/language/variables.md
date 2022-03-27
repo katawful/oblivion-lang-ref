@@ -1,10 +1,3 @@
-  title: variables
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Variables
 Variables store values of the specified type (see: [Variable Types](#variable-types)). They
 can be contained in 3 scopes: global, quest, and script.
@@ -25,4 +18,3 @@ the type of script/the object attached to it.
 - For magic effect scripts, variables are never saved.
 - For user-defined functions, variables are never saved.
 
-vim:tw=100:ft=norg:norl:

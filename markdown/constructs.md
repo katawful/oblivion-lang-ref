@@ -1,10 +1,3 @@
-  title: constructs
-  description: Details on important constructs of obl
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Essential Constructs
 ## Loose Language
 `obl` is completely case insensitive, and is also whitespace insensitive (assuming constructs
@@ -156,4 +149,3 @@ order), but COEE may also present its own issues. Only use if OE fails.
 
 > COEE can be considered a semantical problem, not a syntaxical one
 
-vim:tw=100:ft=norg:norl:

@@ -1,10 +1,3 @@
-  title: arrays
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Arrays
 Arrays are containers. They can store any of the [Literals] types, plus another array. They are
 very similar to most language containers, like Lua tables and C++ vectors. See [Array Types](#arrays) for the 3 types of arrays available. Conversion between these types is not possible.
@@ -325,4 +318,3 @@ The optional bool can set sorting to reverse.
 
 `(sorted:array_var) ar_CustomSort source:array_var comparisonFunction:ref descend:bool`
 
-vim:tw=100:ft=norg:norl:

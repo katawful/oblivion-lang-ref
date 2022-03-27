@@ -1,10 +1,3 @@
-  title: lexical
-  description: Lexical conventions of obl
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Lexical Conventions
 As stated previously, `obl` is a rather loose language. It is completely case and whitespace
 insensitive. Indentation and case are completely up to the end developer, though it is recommended
@@ -28,4 +21,3 @@ as variables.
 `obl` can only accept printable ASCII characters (i.e. up to byte 127) in any applicable
 construct. Additionally, string variables can contain any of the extended ASCII characters.
 
-vim:tw=100:ft=norg:norl:

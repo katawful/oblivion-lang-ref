@@ -1,10 +1,3 @@
-  title: statements
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Statements
 Statements are constructs that simply declare an action in the game. They do not return anything
 as a result. There are 12 main statements in `obl`:
@@ -630,4 +623,3 @@ These operate like any regular function, and are typically prefixed with "Set", 
 self explanatory. A full list will can be found elsewhere. Generally expect to use these to
 create side-effects.
 
-vim:tw=100:ft=norg:norl:

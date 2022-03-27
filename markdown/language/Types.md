@@ -1,10 +1,3 @@
-  title: Types
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Types
 ## Literal Types
 Literals can be used in any place a variable can, and are simply the direct connotation of what
@@ -137,4 +130,3 @@ See the section on References for more details.
 ## Null Type
 You cannot assign anything to the null type, it is simply returned upon a runtime error.
 
-vim:tw=100:ft=norg:norl:

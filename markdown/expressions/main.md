@@ -1,10 +1,3 @@
-  title: main
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Expressions
 Expressions return a value of one of the possible [Types](#types). The general forms are as so:
 
@@ -62,4 +55,3 @@ end
 [Math Functions](#expressionsmathmd)
 [Array Functions](#expressionsarraysmd)
 
-vim:tw=100:ft=norg:norl:

@@ -1,10 +1,3 @@
-  title: oblivion-language
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-01-14
-  version: 0.0.11
-
 Oblivion
 
 Table of Contents
@@ -36,4 +29,3 @@ are not solely valid. Any problems related to that will be discussed as they arr
 
 [Main Details](#expressionsmainmd)
 
-vim:tw=100:ft=norg:norl:

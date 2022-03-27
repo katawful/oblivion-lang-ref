@@ -1,10 +1,3 @@
-  title: operators
-  description: List of operators
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
-
 # Operators
 The following is a list of operators found in `obl`. This is just a cursory list, see the
 respective sections of each list for how they work.
@@ -57,4 +50,3 @@ Operator | Type | Usage | Precedence
 
 > Note that highest precedence is 15
 
-vim:tw=100:ft=norg:norl:
