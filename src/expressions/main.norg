@@ -8,7 +8,6 @@
 @end
 
 * Expressions
-
   Expressions return a value of one of the possible [Types]{*** Types}. The general forms are as so:
 
   @code ebnf
@@ -26,12 +25,10 @@
   Literals can be found in [Literals]{**** Literal Types}.
 
  ** Associativity 
-
     It can be assumed that all expressions in `obl` is left associative. Precedence controls order
     of operations for expressions.
 
  ** Variables as Expressions
-
     Any variable type can be used in a place an expression is expected, when strict typing is not a
     concern. If dealing with a function found in the original release of the game, use [Oblivion
     expressions]{**** Implicit Type Forcing via OBSE Expressions (OE)}. When used as expressions,
@@ -41,7 +38,6 @@
     available.
 
  ** Game Expressions
-
     `obl` has a variety of built-in functions that return values based on states in the game itself.
     These can do a large variety of operations, but the general form of a game function is like so:
 
@@ -66,7 +62,6 @@
     @end
 
  ** Available Expressions
-
     {:expressions/math:}[Math Functions]
     {:expressions/arrays:}[Array Functions]
 

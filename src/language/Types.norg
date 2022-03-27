@@ -8,9 +8,7 @@
 @end
 
 * Types
-
  ** Literal Types
-
     Literals can be used in any place a variable can, and are simply the direct connotation of what
     the type refers to. There are a number of literals available to `obl`:
 
@@ -24,7 +22,6 @@
     - Type literal: Any unenclosed string, identifiers not found as game objects
 
  ** Variable Types
-
     Variable types are the types that variables can be.
     - floats: 32-bit/single precision. Effective precision is 1.18E-38 to 3.40E38
     - integers: integers internally stored as floats
@@ -55,7 +52,6 @@
     @end
 
   *** Numbers
-
       All numbers are ultimately stored as floats, there is no use for distinguishing between shorts
       and longs. Thus there are only 2 types, with one having 3 aliases for declaration:
 
@@ -73,20 +69,17 @@
       responsible for behaviors found when working with high number integers.
 
    **** Integers as single floats
-
         As all numbers are stored as floats internally, the only precision is the limitations of the
         32-bit floats available. Therefore the largest integer value you can make where there's a
         +/- 1 addition is 16,777,216. Higher values are rounded down. This is the source of weird
         math behavior.
 
    **** Integers as double floats
-
         As all numbers are stored as double-precision floats internally, there is no use in
         distinguishing between shorts and longs. Thus the full signed range up to 2,147,483,647 can
         be used for any integer type. 
 
   *** Reference
-
       Reference variables, confusingly, do not refer to anything. They contain the metadata of the
       game object using the EditorID of the object as the name. EditorID is an unenclosed string of
       characters. FormID, a hexadecimal number, can be stored in a reference variable but only as
@@ -107,7 +100,6 @@
       @end
 
   *** Strings
-
       Strings are standard ASCII. They behave as containers, taking all array operations available.
       They additionally get saved to the player's save game. Variables of this type behave in
       specific ways. See the section on Strings in Expressions for more details.
@@ -119,7 +111,6 @@
       @end
 
   *** Arrays
-
       Arrays are a generalized container type that gets saved to the player's saved game. They can
       be 1 of three types:
 
@@ -137,7 +128,6 @@
       exist before manipulation, see the section on Arrays in Expressions for more details.
 
  ** Return and Parameter Types
-
     Documentation of game functions will show a variety of types that can be returned and used as
     parameters. The above types can all be used in addition to the following:
 
@@ -158,7 +148,6 @@
     See the section on References for more details.
 
  ** Null Type
-
     You cannot assign anything to the null type, it is simply returned upon a runtime error.
 
 #comment

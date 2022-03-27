@@ -13,7 +13,6 @@
 
 
 * Oblivion Scripting Language Reference for xOBSE v22.6.1
-
   Oblivion Language (obl) is a dynamically typed interpreted language for the video game /The Elder
   Scrolls IV: Oblivion/. While language within development tools refers to "compilation" of scripts,
   it is only a temporary transpilation to, mildly human readable, internal game (not machine)
@@ -32,7 +31,6 @@
   {:constructs:}[General Language Constructs]
 
  ** Language
-
     {:language/lexical:}[Lexical Conventions]
     {:language/operators:}[Operators]
     {:language/Types:}[Available Types]

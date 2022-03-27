@@ -8,12 +8,10 @@
 @end
 
 * Statements
-
   Statements are constructs that simply declare an action in the game. They do not return anything
   as a result. There are 12 main statements in `obl`:
 
  ** "Begin" Blocks
-
     `obl` does not have traditional function blocks. Being a game specific language, the language
     instead has constructs that wrap around internal game features. All execution happens within
     these blocks, and are colloquially known as "begin blocks". For clarity, this documentation will
@@ -41,7 +39,6 @@
     contain one "function" block with no others.
 
   *** Begin Block Game Features
-
       Begin blocks must be attached to specific game features, or be a function. Some take
       arguments, optionally or no, and multiple. The syntax is like so:
 
@@ -103,7 +100,7 @@
       @end
 
   *** Magic Effect Block Types
-      The following are only available for magic effect scripts:
+			The following are only available for magic effect scripts:
       @table
       Game Feature | (Number of Arguments) | Type | Description
       -
@@ -267,7 +264,6 @@
       This block won't fire for scripted apparel enchantments or abilities.
 
  ** Variable Declarators
-
     @code ebnf
     variableDeclaration = varType, variable, eol;
     varType = "float"
@@ -298,7 +294,6 @@
     - [ ] Check if all types default initialize to 0
 
  ** Set Statement
-
     @code ebnf
     setStatement = "set", variable, "to", (expression | literal), eol;
     @end
@@ -319,7 +314,6 @@
     Strings in Expressions for more.
 
  ** Let Statement
-
     @code ebnf
     letStatement = "let", variable, (assignment | compoundAssignment), (expression | literal), eol;
     assignment = ":=";
@@ -356,7 +350,6 @@
     @end
 
  ** Return Statement
-
     @code ebnf
     returnStatement = "return", eol;
     @end
@@ -376,7 +369,6 @@
     stops the script from processing. It can be called at any point in time.
 
  ** Conditionals
-
     @code ebnf
     conditional = if, [{elseIf}], [else], "endif";
     if = "if", (expression | literal), eol, [{statement}];
@@ -419,7 +411,6 @@
     @end
 
   *** Conditions always evaluate
-
       Processing of conditionals is not exactly standard. While most languages will only ever
       process a condition until it finds a true value, `obl` will process /every/ condition until it
       finds a way to exit the condition, whether this is the end of the condition or a return
@@ -451,7 +442,6 @@
       @end
 
   *** Conditions are slow to process
-
       As conditions always process, large conditions are very slow overall. Nesting large conditions
       is always suggested:
 
@@ -475,14 +465,12 @@
       Functions.
 
   *** Truthy/Falsy Values
-
       Values that return true are any non-zero values. Values that return false are any 0 values.
       Any empty variable is defaulted to 0 regardless of type, any filled variable is a truthy
       value. Thus you can simply use a variable as a condition without comparing it to any
       truthy/falsy value depending on what you want.
 
  ** While Statement
-
     @code ebnf
     whileStatement = while, [{loopBody}], loop;
     while = "while", (expression | literal), eol, [{statement}];
@@ -510,15 +498,14 @@
     eventually. The game will lock up otherwise.
 
   *** Break Statement
-      The break statement is a substatement. It behaves like a return statement, but within a loop.
+			The break statement is a substatement. It behaves like a return statement, but within a loop.
       It cancels the execution of the loop.
 
   *** Continue Statement
-      The continue statement is a substatement. It behaves like a return statement, but within a
+			The continue statement is a substatement. It behaves like a return statement, but within a
       loop. It stops the current execution of the loop for the next iteration.
 
  ** ForEach Statement
-
     @code ebnf
     forEachStatement = forEach, [{loopBody}], loop;
     forEach = destinationVariable, "<-", sourceContainer;
@@ -543,18 +530,15 @@
     depends on the type of the source container.
 
   *** Array Source
-
       For array source containers, the destination variable is a string map of 2 keys: "key" and
       "value". "key" is the current key of the source container. "value" is the current value of the
       source container.
 
   *** String Source
-
       For string source containers, the destination variable is a string variable of the current
       character of the string.
 
    **** Reference Source
-
         For reference source containers (which contain a physical container), the destination
         variable is a reference variable of the current item being processed. See the section on
         Inventory References for more.
@@ -563,7 +547,6 @@
       ForEach statements can take the [Break]{***** Break Statement} and [Continue]{***** Continue Statement}.
 
  ** User-Defined Function Return Statement
-
     @code ebnf
     functionValue = "SetFunctionValue", {expression}
     @end
@@ -582,7 +565,6 @@
     See: User-Defined Functions in Expressions for more.
 
  ** Label Statement
-
     @code ebnf
     label = ("label" | "SaveIP"), [labelName];
     labelName = identifier;
@@ -623,7 +605,6 @@
     otherwise.
 
  ** GoTo Statement
-
     @code ebnf
     label = ("goto" | "RestoreIP"), [labelName];
     labelName = identifier;
@@ -653,7 +634,6 @@
     label name. If no label name is provided, it goes to the unnamed label statement.
 
  ** Game Statements
-
     Being a video game oriented language, `obl` has many statements that update and mutate many game
     features which only ever return null. As these return null, the compiler will not compile the
     script unless you use OE to ignore this. This will lead to runtime errors instead.

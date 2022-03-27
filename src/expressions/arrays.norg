@@ -8,7 +8,6 @@
 @end
 
 * Arrays
-
   Arrays are containers. They can store any of the [Literals] types, plus another array. They are
   very similar to most language containers, like Lua tables and C++ vectors. See [Array Types]{*****
   Arrays} for the 3 types of arrays available. Conversion between these types is not possible.
@@ -34,7 +33,6 @@
   [ForEach Loops]{**** ForEach Statement}. Both have upsides and should be considered.
 
  ** Using While Loops to Iterate Arrays
-
     A while statement is a very simple construct. It loops until an expression is false. Because of
     this, it is very fast. A simple loop over an array can be significantly faster than a foreach
     loop. However, it can only successfully iterate over the array type "array" (i.e. 0-indexed
@@ -65,7 +63,6 @@
     @end
 
  ** Using ForEach Loops to Iterate Arrays
-
     ForEach loops can be used to directly iterate over each value of any array type. Like most
     languages with the foreach statement, a destination variable is used that contains the
     information needed. In `obl` that destination variable is itself an array. See the section on
@@ -117,7 +114,6 @@
     is a case where it can fail even with OEs.
 
  ** Slice/Range Notation
-
     Arrays can be addressed over a range of valid index values:
 
     @code ebnf
@@ -157,122 +153,125 @@
     ~ Numerical value of strings is used
 
  ** ar_Construct
-
     Creates and returns a new empty array of the specified type:
     ~ Array
     ~ Map
     ~ StringMap
+
     `(array_var) ar_Construct arrayType:type`
 
  ** ar_Size
-
     Returns the number of elements in an array, or -1 for uninitialized arrays.
+
     `(array_var) ar_Size array:array_var`
 
  ** ar_Dump
-
     Prints the contents of the array, key and value, to the console.
+
     `(null) ar_Dump array:array_var`
 
  ** ar_DumpID
-
     Like ar_Dump but accepts an array ID instead.
+
     `(null) ar_DumpID arrayID:int`
 
  ** ar_Erase
-
     Erases all elements in an array, a single element, or a range using [Slice/Range Notation]{***** Slice/Range Notation}.
     Returns the number of elements removed.
+
     `(removed:int) ar_Erase target:array_var`
+
     `(removed:int) ar_Erase target:array_var[index:arrayIndex]`
+
     `(removed:int) ar_Erase target:array_var[sliceRange]`
 
  ** ar_Find
-
     Locates the first value in an array of the specified value, and returns the key associated with
     it. Accepts a range. Returns an empty string for StringMaps or -99999.0 for numerical arrays
     when no value is found.
+
     `(index:arrayIndex) ar_Find value:Literal sourceArray:array_var`
+
     `(index:arrayIndex) ar_Find value:Literal sourceArray:array_var[sliceRange]`
 
  ** ar_Sort
-
     Sorts in ascending order and returns the specified array of type array. Keys associated with
     these values are lost. All elements must be the same type. If not, then an empty array is
     returned. An optional truthy value uses descending order.
     ~ Strings are sorted alphabetically and case-insensitively
     ~ Numbers are sorted numerically
     ~ Objects are sorted by FormID
+
     `(sorted:array_var) ar_Sort source:array_var descend:bool`
 
  ** ar_SortAlpha
-
     Sorts in ascending order and returns the specified array of type array. Keys associated with
     these values are lost. Converts all values to strings temporarily, then sorts alphabetically and
     case-insensitively. An optional truthy value uses descending order.
+
     `(sorted:array_var) ar_SortAlpha source:array_var descend:bool`
 
  ** ar_Copy
-
     Creates and returns a copy of the source array, making references to any nested arrays.
+
     `(copy:array_var) ar_Copy source:array_var`
 
  ** ar_DeepCopy
-
     Like `ar_Copy` but nested arrays are also copied.
+
     `(copy:array_var) ar_Copy source:array_var`
 
     #contexts language-reference documentation test
     - [ ] see if first/last works for all types
 
  ** ar_First
-
     Returns the key of the first element of an array.
+
     `(index:arrayIndex) ar_First source:array_var`
 
  ** ar_Last
-
     Returns the key of the last element of an array.
+
     `(index:arrayIndex) ar_Last source:array_var`
 
  ** ar_BadNumericIndex
-
     Returns a constant representing the invalid numerical index. Used for comparing to the return
     value of array functions.
+
     `(badIndex:int) ar_BadNumericIndex`
 
  ** ar_BadStringIndex
-
     Like `ar_BadNumericIndex` but for StringMaps.
+
     `(badIndex:int) ar_BadStringIndex`
 
  ** ar_Next
-
     Returns the key of the element immediately following the specified key. Returns the bad index
     constant if no key follows.
+
     `(nextIndex:arrayIndex) ar_Next source:array_var index:arrayIndex`
 
  ** ar_Prev
-
     Returns the key of the element immediately preceding the specified key. Returns the bad index
     constant if no key follows.
+
     `(prevIndex:arrayIndex) ar_Prev source:array_var index:arrayIndex`
 
  ** ar_Keys
-
     Returns an array of type array containing all of the keys of the source array.
+
     `(array:array_var) ar_Keys source:array_var`
 
  ** ar_HasKeys
-
     Returns true if array has an element with the specified key.
+
     `(hasKey:bool) ar_HasKey source:array_var index:arrayIndex`
 
  ** ar_List
-
     Taking up to 20 arguments of any type, returns an array of type array containing those elements
     in the order in which they were passed. Separation of arguments is optionally comma separated
     (and encouraged).
+
     `(list:array_var) ar_List arg1:literal arg2:literal ... arg20:literal`
 
  ** ar_Map
@@ -281,44 +280,44 @@
 
     Returns a Map or StringMap given up to 20 key-value pairs. Keys must be either numbers or
     strings, values can be any value.
+
     `(Map/StringMap) ar_Map keyValue1 keyValue2 ... keyValue20`
 
     > Note that the rest of these functions only apply to arrays of type array
 
  ** ar_Resize
-
     Resizes an array that is resized to the specified size. If the new array is smaller, values
     outside of that array are lost. If the new array is bigger, new values are used. 0 is the
     default, but the padding values can be specified. Returns true if successful, false otherwise.
+
     `(resized:bool) ar_Resize source:array_var size:int paddingValue:multi`
 
  ** ar_Insert
-
     Inserts a single element into an array at the index. Index must be inside the array. Elements
     above the index are shifted up by 1 index. Returns true on success, false otherwise.
+
     `(inserted:bool) ar_Insert source:array_var index:arrayIndex value:multi`
 
  ** ar_InsertRange
-
     Inserts a range of elements into an array at the index. Index must be inside the array. Elements
     above the index are shifted up by the number of elements inserted. Returns true on success,
     false otherwise.
+
     `(inserted:bool) ar_Insert source:array_var index:arrayIndex range:array_var`
 
  ** ar_Range
-
     Returns an array of 0 or more numbers within the inclusive start and end ranges, on the optional
     interval specified, otherwise 1. This allows one to mimic traditional for loops using the
     foreach loop.
+
     `(range:array_var) ar_Range start:int end:int step:int`
 
  ** ar_Append
-
     Appends value to array.
+
     `(null) ar_Append source:array_var value:value`
 
  ** ar_CustomSort
-
     Returns an array sorted by the called sorting function. The function takes 2 array_var
     arguments. When called, the arguments contain 1 element each - the values being compared. The
     function returns false if the first argument is less than the second argument and true if the
@@ -328,6 +327,7 @@
     provide a definitive ordering of your array. Otherwise this function will never terminate.
 
     The optional bool can set sorting to reverse.
+
     `(sorted:array_var) ar_CustomSort source:array_var comparisonFunction:ref descend:bool`
 
 
