@@ -25,7 +25,7 @@
   `::` | Binary | Make Pair | 3
   `->` | Binary | Member Access | 15
   `<-` | Binary | ForEach Access | 15
-  '.' | Binary | Method/Namespace Access
+  `.` | Binary | Method/Namespace Access | n/a
   -
   `>` | Binary | Comparison | 5
   `<` | Binary | Comparison | 5
