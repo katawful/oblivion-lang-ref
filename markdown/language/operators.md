@@ -10,12 +10,12 @@ respective sections of each list for how they work.
 |`/` | Binary | Math | 10|
 |`^` | Binary | Math | 11|
 |`%` | Binary | Math | 10|
-|-|-|-|-|
+|-|
 |`:` | Binary | Slice/Range | 3|
 |`::` | Binary | Make Pair | 3|
 |`->` | Binary | Member Access | 15|
 |`<-` | Binary | ForEach Access | 15|
-|'.' | Binary | Method/Namespace Access|
+|`.` | Binary | Method/Namespace Access|
 |-|-|-|-|
 |`>` | Binary | Comparison | 5|
 |`<` | Binary | Comparison | 5|
@@ -24,7 +24,7 @@ respective sections of each list for how they work.
 |`==` | Binary | Comparison | 4|
 |`!=` | Binary | Comparison | 4|
 |`&&` | Binary | Comparison | 2|
-|`||` | Binary | Comparison | 1|
+|`\|\|` | Binary | Comparison | 1|
 |`!` | Unary | Comparison | 13|
 |-|-|-|-|
 |`()` | n/a | Precedence/OE | 14|
@@ -33,7 +33,7 @@ respective sections of each list for how they work.
 |`>>` | Binary | Bitwise | 8|
 |`<<` | Binary | Bitwise | 8|
 |`&` | Binary | Bitwise | 7|
-|`|` | Binary | Bitwise | 6|
+|`\|` | Binary | Bitwise | 6|
 |-|-|-|-|
 |`-` | Unary | Negation | 12|
 |`$` | Unary | Stringicize | 12|

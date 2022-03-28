@@ -211,7 +211,7 @@ There are a number of bitwise operators:
 |`>>` | Binary | Left Shift | 8|
 |`<<` | Binary | Right Shift | 8|
 |`&` | Binary | Logical AND | 7|
-|`|` | Binary | Logical OR | 6|
+|`\|` | Binary | Logical OR | 6|
 
 > Note the lack of logical XOR and logical NOT binary operators
 

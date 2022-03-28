@@ -117,8 +117,8 @@ parameters. The above types can all be used in addition to the following:
 |-|-|-|
 |chars | `4` character string, optionally enclosed in quotes | String|
 |bool | `1` for true, `0` for false | Number|
-|formatString | a string that takes format specifiers, plus up to 20 arguments [1](1) | String|
-|FormID | a hexadecimal number of an object [2](2) | Reference|
+|formatString | a string that takes format specifiers, plus up to 20 arguments [1](#1) | String|
+|FormID | a hexadecimal number of an object [2](#2) | Reference|
 |multi | any non-object value | n/a|
 
 ###### 1

@@ -61,33 +61,33 @@ The following is a description of each, parenthesized means it is optional:
 |Game Feature | (Number of Arguments) | Type | Description|
 |-|-|-|-|
 |'GameMode' | 0 | n/a | Runs continuously during normal gameplay|
-|'MenuMode' | (menuType) | int | Runs continuously during any menu, optionally within a specific menu type. See [Menu Types](Menu-Types)|
+|'MenuMode' | (menuType) | int | Runs continuously during any menu, optionally within a specific menu type. See [Menu Types](#Menu-Types)|
 |'OnActivate' | 0 | n/a | Runs once when scripted object is activated by an actor, blocks normal activation use of scripted object. Must be scripted back in|
 |'OnActorEquip' | objectID | ref | Runs once when scripted actor equips objectID|
 |'OnActorUnequip' | objectID | ref | Runs once when scripted actor unequips objectID|
-|'OnAdd' | (objectID) | ref | Runs once whenever script object is added to an inventory or objectID's inventory. See [OnAdd](OnAdd)|
+|'OnAdd' | (objectID) | ref | Runs once whenever script object is added to an inventory or objectID's inventory. See [OnAdd](#OnAdd)|
 |'OnAlarm' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally caused by the actorID|
 |'OnAlarmVictim' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally on the actorID|
-|'OnDeath' | (actorID) | ref | Runs once whenever the scripted actor dies, optionally if the actorID kills said actor. See [OnDeath](OnDeath)|
-|'OnDrop' | (actorID) | ref | Runs once whenever the scripted object is removed from an inventory, optionally from the actorID's inventory. See [OnDrop](OnDrop)|
-|'OnEquip' | (actorID) | ref | Runs once whenever the scripted object is equipped, optionally by the actorID. See [OnEquip](OnEquip)|
-|'OnHit' | (actorID) | ref | Runs once whenever the scripted actor is hit, optionally hit by the actorID. See [OnHit](OnHit)|
-|'OnHitWith' | (objectID) | ref | Runs once whenever the scripted actor/object is hit by any weapon, optionally hit by the objectID. See [OnHitWith](OnHitWith)|
+|'OnDeath' | (actorID) | ref | Runs once whenever the scripted actor dies, optionally if the actorID kills said actor. See [OnDeath](#OnDeath)|
+|'OnDrop' | (actorID) | ref | Runs once whenever the scripted object is removed from an inventory, optionally from the actorID's inventory. See [OnDrop](#OnDrop)|
+|'OnEquip' | (actorID) | ref | Runs once whenever the scripted object is equipped, optionally by the actorID. See [OnEquip](#OnEquip)|
+|'OnHit' | (actorID) | ref | Runs once whenever the scripted actor is hit, optionally hit by the actorID. See [OnHit](#OnHit)|
+|'OnHitWith' | (objectID) | ref | Runs once whenever the scripted actor/object is hit by any weapon, optionally hit by the objectID. See [OnHitWith](#OnHitWith)|
 |'OnKnockout' | 0 | n/a | Runs once whenever the scripted actor enters the "knocked out" state|
-|'OnLoad' | 0 | n/a | Runs once whenever the scripted object's 3D model loads. See [OnLoad](OnLoad)|
-|'OnMagicEffectHit' | (effectID) | chars | Runs once whenever the scripted actor/object is hit by any magic effect, optionally hit by the effectID. See [OnMagicEffectHit](OnMagicEffectHit)|
-|'OnMurder' | (actorID) | ref | Non-functional block type. See [OnMurder](OnMurder)|
-|'OnPackageChange' | packageID | ref | Runs once whenever the scripted actor changes from the packageID to some other packageID. See [OnPackageChange](OnPackageChange)|
-|'OnPackageDone' | packageID | ref | Runs once whenever the scripted actor finishes packageID. See [OnPackageDone](OnPackageDone)|
-|'OnPackageEnd' | packageID | ref | Alias for OnPackageDone. See [OnPackageDone](OnPackageDone)|
+|'OnLoad' | 0 | n/a | Runs once whenever the scripted object's 3D model loads. See [OnLoad](#OnLoad)|
+|'OnMagicEffectHit' | (effectID) | chars | Runs once whenever the scripted actor/object is hit by any magic effect, optionally hit by the effectID. See [OnMagicEffectHit](#OnMagicEffectHit)|
+|'OnMurder' | (actorID) | ref | Non-functional block type. See [OnMurder](#OnMurder)|
+|'OnPackageChange' | packageID | ref | Runs once whenever the scripted actor changes from the packageID to some other packageID. See [OnPackageChange](#OnPackageChange)|
+|'OnPackageDone' | packageID | ref | Runs once whenever the scripted actor finishes packageID. See [OnPackageDone](#OnPackageDone)|
+|'OnPackageEnd' | packageID | ref | Alias for OnPackageDone. See [OnPackageDone](#OnPackageDone)|
 |'OnPackageStart' | packageID | ref | Runs once whenever the scripted actor starts packageID|
 |'OnReset' | 0 | n/a | Runs once when the scripted object's cell is reset due to time expiration|
 |'OnSell' | (actorID) | ref | Runs once when the scripted object is sold, optionally when sold by actorID|
 |'OnStartCombat' | (actorID) | ref | Runs once when the scripted actor enters combat, optionally when starting combat with actorID|
 |'OnTrigger' | (objectID) | ref | Runs continuously whenever anything is colliding with the scripted object, optionally by objectID|
 |'OnTriggerActor' | (actorID) | ref | Runs continuously whenever an actor is colliding with the scripted object, optionally by actorID|
-|'OnTriggerMob' | (actorID) | ref | Runs continuously whenever a mobile object is colliding with the scripted object, optionally by actorID. See [OnTriggerMob](OnTriggerMob)|
-|'OnUnequip' | (actorID) | ref | Runs once whenever the scripted object is unequipped, optionally by the actorID. See [OnUnequip](OnUnequip)|
+|'OnTriggerMob' | (actorID) | ref | Runs continuously whenever a mobile object is colliding with the scripted object, optionally by actorID. See [OnTriggerMob](#OnTriggerMob)|
+|'OnUnequip' | (actorID) | ref | Runs once whenever the scripted object is unequipped, optionally by the actorID. See [OnUnequip](#OnUnequip)|
 
 ### Magic Effect Block Types
 
@@ -95,9 +95,9 @@ The following are only available for magic effect scripts:
 
 |Game Feature | (Number of Arguments) | Type | Description|
 |-|-|-|-|
-|'ScriptEffectFinish' | 0 | n/a | Runs once whenever the scripted spell effect finishes. See [ScriptEffectFinish](ScriptEffectFinish)|
-|'ScriptEffectStart' | 0 | n/a | Runs on the first iteration of a scripted spell effect. See [ScriptEffectStart](ScriptEffectStart)|
-|'ScriptEffectUpdate' | 0 | n/a | Runs on the first iteration of a scripted spell effect and each time it runs. See [ScriptEffectUpdate](ScriptEffectUpdate)|
+|'ScriptEffectFinish' | 0 | n/a | Runs once whenever the scripted spell effect finishes. See [ScriptEffectFinish](#ScriptEffectFinish)|
+|'ScriptEffectStart' | 0 | n/a | Runs on the first iteration of a scripted spell effect. See [ScriptEffectStart](#ScriptEffectStart)|
+|'ScriptEffectUpdate' | 0 | n/a | Runs on the first iteration of a scripted spell effect and each time it runs. See [ScriptEffectUpdate](#ScriptEffectUpdate)|
 
 Notes:
 - objectID is the ID of some object of any kind that can be interacted with, such as an actor or item
@@ -390,7 +390,7 @@ standard C-style comparator binary operators:
 |`<=` | Left less than or equal to right|
 |`!` | Unary operation, returns opposite truthy/falsy value for an expression|
 |`&&` | Left and right are both truthy, AND operation|
-|`||` | Left or right is truthy, OR operation|
+|`\|\|` | Left or right is truthy, OR operation|
 
 ### Conditions always evaluate
 Processing of conditionals is not exactly standard. While most languages will only ever
