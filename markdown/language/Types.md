@@ -45,10 +45,10 @@ string_var string
 All numbers are ultimately stored as floats, there is no use for distinguishing between shorts
 and longs. Thus there are only 2 types, with one having 3 aliases for declaration:
 
-Type | Declaration
--
-float | `float`
-integer | `int`, `short`, `long`
+|Type | Declaration|
+|-|-|
+|float | `float`|
+|integer | `int`, `short`, `long`|
 
 **NOTE:** the following two headings are here to address 2 solutions to integers being stored as
 floats. While it is absolutely confirmed that the game internally stores integers in scripts
@@ -73,9 +73,9 @@ game object using the EditorID of the object as the name. EditorID is an unenclo
 characters. FormID, a hexadecimal number, can be stored in a reference variable but only as
 the return value of a function. It'll get converted to the EditorID implicitly.
 
-Type | Declaration
--
-reference | ref
+|Type | Declaration|
+|-|-|
+|reference | ref|
 
 ```obse
 scn HowRefVarsWork
@@ -90,9 +90,9 @@ Strings are standard ASCII. They behave as containers, taking all array operatio
 They additionally get saved to the player's save game. Variables of this type behave in
 specific ways. See the section on Strings in Expressions for more details.
 
-Type | Declaration
--
-string | string_var
+|Type | Declaration|
+|-|-|
+|string | string_var|
 
 ### Arrays
 Arrays are a generalized container type that gets saved to the player's saved game. They can
@@ -102,9 +102,9 @@ be 1 of three types:
 2. Map: a non-ordered array that takes any number as index
 3. StringMap: a non-ordered array that takes any string as index
 
-Type | Declaration
--
-array | array_var
+|Type | Declaration|
+|-|-|
+|array | array_var|
 
 Array variables, like string variables are references to the container. The container must
 exist before manipulation, see the section on Arrays in Expressions for more details.
@@ -113,18 +113,18 @@ exist before manipulation, see the section on Arrays in Expressions for more det
 Documentation of game functions will show a variety of types that can be returned and used as
 parameters. The above types can all be used in addition to the following:
 
-Type | Source Type | Stored Type
--
-chars | `4` character string, optionally enclosed in quotes | String
-bool | `1` for true, `0` for false | Number
-formatString | a string that takes format specifiers, plus up to 20 arguments {| 1} | String
-FormID | a hexadecimal number of an object {| 2} | Reference
-multi | any non-object value | n/a
+|Type | Source Type | Stored Type|
+|-|-|-|
+|chars | `4` character string, optionally enclosed in quotes | String|
+|bool | `1` for true, `0` for false | Number|
+|formatString | a string that takes format specifiers, plus up to 20 arguments [1](1) | String|
+|FormID | a hexadecimal number of an object [2](2) | Reference|
+|multi | any non-object value | n/a|
 
-1
+###### 1
 Format specifiers can be found in the sections on Strings in Expressions.
 
-2
+###### 2
 See the section on References for more details.
 
 ## Null Type

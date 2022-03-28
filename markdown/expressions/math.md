@@ -2,14 +2,14 @@
 `obl` supports a number of standard arithmetic operators. Operators are symbols, either unary or
 binary that combine 1 or more identifiers into an expression.
 
-Operator | Type | Use | Precedence
--
-`+` | Binary | Addition | 9
-`-` | Binary | Subtraction | 9
-`*` | Binary | Multiplication | 10
-`/` | Binary | Division | 10
-`^` | Binary | Exponentiation | 11
-`%` | Binary | Integer modulo | 10
+|Operator | Type | Use | Precedence|
+|-|-|-|-|
+|`+` | Binary | Addition | 9|
+|`-` | Binary | Subtraction | 9|
+|`*` | Binary | Multiplication | 10|
+|`/` | Binary | Division | 10|
+|`^` | Binary | Exponentiation | 11|
+|`%` | Binary | Integer modulo | 10|
 
 > Integer modulo takes the integer remainder of the division factor.
 
@@ -207,11 +207,11 @@ language-reference core documentation- explain bitwise operations
 being added. Manual conversion between binary and decimal must be performed.
 
 There are a number of bitwise operators:
-Operator | Type | Function | Precedence
-`>>` | Binary | Left Shift | 8
-`<<` | Binary | Right Shift | 8
-`&` | Binary | Logical AND | 7
-`|` | Binary | Logical OR | 6
+|Operator | Type | Function | Precedence|
+|`>>` | Binary | Left Shift | 8|
+|`<<` | Binary | Right Shift | 8|
+|`&` | Binary | Logical AND | 7|
+|`|` | Binary | Logical OR | 6|
 
 > Note the lack of logical XOR and logical NOT binary operators
 

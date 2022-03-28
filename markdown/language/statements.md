@@ -57,36 +57,37 @@ end
 The following is a description of each, parenthesized means it is optional:
 
 ### General Block Types
-Game Feature | (Number of Arguments) | Type | Description
--
-'GameMode' | 0 | n/a | Runs continuously during normal gameplay
-'MenuMode' | (menuType) | int | Runs continuously during any menu, optionally within a specific menu type. See {| Menu Types}
-'OnActivate' | 0 | n/a | Runs once when scripted object is activated by an actor, blocks normal activation use of scripted object. Must be scripted back in
-'OnActorEquip' | objectID | ref | Runs once when scripted actor equips objectID
-'OnActorUnequip' | objectID | ref | Runs once when scripted actor unequips objectID
-'OnAdd' | (objectID) | ref | Runs once whenever script object is added to an inventory or objectID's inventory. See {| OnAdd}
-'OnAlarm' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally caused by the actorID
-'OnAlarmVictim' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally on the actorID
-'OnDeath' | (actorID) | ref | Runs once whenever the scripted actor dies, optionally if the actorID kills said actor. See {| OnDeath}
-'OnDrop' | (actorID) | ref | Runs once whenever the scripted object is removed from an inventory, optionally from the actorID's inventory. See {| OnDrop}
-'OnEquip' | (actorID) | ref | Runs once whenever the scripted object is equipped, optionally by the actorID. See {| OnEquip}
-'OnHit' | (actorID) | ref | Runs once whenever the scripted actor is hit, optionally hit by the actorID. See {| OnHit}
-'OnHitWith' | (objectID) | ref | Runs once whenever the scripted actor/object is hit by any weapon, optionally hit by the objectID. See {| OnHitWith}
-'OnKnockout' | 0 | n/a | Runs once whenever the scripted actor enters the "knocked out" state
-'OnLoad' | 0 | n/a | Runs once whenever the scripted object's 3D model loads. See {| OnLoad}
-'OnMagicEffectHit' | (effectID) | chars | Runs once whenever the scripted actor/object is hit by any magic effect, optionally hit by the effectID. See {| OnMagicEffectHit}
-'OnMurder' | (actorID) | ref | Non-functional block type. See {| OnMurder}
-'OnPackageChange' | packageID | ref | Runs once whenever the scripted actor changes from the packageID to some other packageID. See {| OnPackageChange}
-'OnPackageDone' | packageID | ref | Runs once whenever the scripted actor finishes packageID. See {| OnPackageDone}
-'OnPackageEnd' | packageID | ref | Alias for OnPackageDone. See {| OnPackageDone}
-'OnPackageStart' | packageID | ref | Runs once whenever the scripted actor starts packageID
-'OnReset' | 0 | n/a | Runs once when the scripted object's cell is reset due to time expiration
-'OnSell' | (actorID) | ref | Runs once when the scripted object is sold, optionally when sold by actorID
-'OnStartCombat' | (actorID) | ref | Runs once when the scripted actor enters combat, optionally when starting combat with actorID
-'OnTrigger' | (objectID) | ref | Runs continuously whenever anything is colliding with the scripted object, optionally by objectID
-'OnTriggerActor' | (actorID) | ref | Runs continuously whenever an actor is colliding with the scripted object, optionally by actorID
-'OnTriggerMob' | (actorID) | ref | Runs continuously whenever a mobile object is colliding with the scripted object, optionally by actorID. See {| OnTriggerMob}
-'OnUnequip' | (actorID) | ref | Runs once whenever the scripted object is unequipped, optionally by the actorID. See {| OnUnequip}
+
+|Game Feature | (Number of Arguments) | Type | Description|
+|-|-|-|-|
+|'GameMode' | 0 | n/a | Runs continuously during normal gameplay|
+|'MenuMode' | (menuType) | int | Runs continuously during any menu, optionally within a specific menu type. See [Menu Types](Menu-Types)|
+|'OnActivate' | 0 | n/a | Runs once when scripted object is activated by an actor, blocks normal activation use of scripted object. Must be scripted back in|
+|'OnActorEquip' | objectID | ref | Runs once when scripted actor equips objectID|
+|'OnActorUnequip' | objectID | ref | Runs once when scripted actor unequips objectID|
+|'OnAdd' | (objectID) | ref | Runs once whenever script object is added to an inventory or objectID's inventory. See [OnAdd](OnAdd)|
+|'OnAlarm' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally caused by the actorID|
+|'OnAlarmVictim' | crimeType, (actorID) | int, ref | Runs once whenever scripted actor receives alarm of crimeType, optionally on the actorID|
+|'OnDeath' | (actorID) | ref | Runs once whenever the scripted actor dies, optionally if the actorID kills said actor. See [OnDeath](OnDeath)|
+|'OnDrop' | (actorID) | ref | Runs once whenever the scripted object is removed from an inventory, optionally from the actorID's inventory. See [OnDrop](OnDrop)|
+|'OnEquip' | (actorID) | ref | Runs once whenever the scripted object is equipped, optionally by the actorID. See [OnEquip](OnEquip)|
+|'OnHit' | (actorID) | ref | Runs once whenever the scripted actor is hit, optionally hit by the actorID. See [OnHit](OnHit)|
+|'OnHitWith' | (objectID) | ref | Runs once whenever the scripted actor/object is hit by any weapon, optionally hit by the objectID. See [OnHitWith](OnHitWith)|
+|'OnKnockout' | 0 | n/a | Runs once whenever the scripted actor enters the "knocked out" state|
+|'OnLoad' | 0 | n/a | Runs once whenever the scripted object's 3D model loads. See [OnLoad](OnLoad)|
+|'OnMagicEffectHit' | (effectID) | chars | Runs once whenever the scripted actor/object is hit by any magic effect, optionally hit by the effectID. See [OnMagicEffectHit](OnMagicEffectHit)|
+|'OnMurder' | (actorID) | ref | Non-functional block type. See [OnMurder](OnMurder)|
+|'OnPackageChange' | packageID | ref | Runs once whenever the scripted actor changes from the packageID to some other packageID. See [OnPackageChange](OnPackageChange)|
+|'OnPackageDone' | packageID | ref | Runs once whenever the scripted actor finishes packageID. See [OnPackageDone](OnPackageDone)|
+|'OnPackageEnd' | packageID | ref | Alias for OnPackageDone. See [OnPackageDone](OnPackageDone)|
+|'OnPackageStart' | packageID | ref | Runs once whenever the scripted actor starts packageID|
+|'OnReset' | 0 | n/a | Runs once when the scripted object's cell is reset due to time expiration|
+|'OnSell' | (actorID) | ref | Runs once when the scripted object is sold, optionally when sold by actorID|
+|'OnStartCombat' | (actorID) | ref | Runs once when the scripted actor enters combat, optionally when starting combat with actorID|
+|'OnTrigger' | (objectID) | ref | Runs continuously whenever anything is colliding with the scripted object, optionally by objectID|
+|'OnTriggerActor' | (actorID) | ref | Runs continuously whenever an actor is colliding with the scripted object, optionally by actorID|
+|'OnTriggerMob' | (actorID) | ref | Runs continuously whenever a mobile object is colliding with the scripted object, optionally by actorID. See [OnTriggerMob](OnTriggerMob)|
+|'OnUnequip' | (actorID) | ref | Runs once whenever the scripted object is unequipped, optionally by the actorID. See [OnUnequip](OnUnequip)|
 
 ### Magic Effect Block Types
 
@@ -94,9 +95,9 @@ The following are only available for magic effect scripts:
 
 |Game Feature | (Number of Arguments) | Type | Description|
 |-|-|-|-|
-|'ScriptEffectFinish' | 0 | n/a | Runs once whenever the scripted spell effect finishes. See {| ScriptEffectFinish}|
-|'ScriptEffectStart' | 0 | n/a | Runs on the first iteration of a scripted spell effect. See {| ScriptEffectStart}|
-|'ScriptEffectUpdate' | 0 | n/a | Runs on the first iteration of a scripted spell effect and each time it runs. See {| ScriptEffectUpdate}|
+|'ScriptEffectFinish' | 0 | n/a | Runs once whenever the scripted spell effect finishes. See [ScriptEffectFinish](ScriptEffectFinish)|
+|'ScriptEffectStart' | 0 | n/a | Runs on the first iteration of a scripted spell effect. See [ScriptEffectStart](ScriptEffectStart)|
+|'ScriptEffectUpdate' | 0 | n/a | Runs on the first iteration of a scripted spell effect and each time it runs. See [ScriptEffectUpdate](ScriptEffectUpdate)|
 
 Notes:
 - objectID is the ID of some object of any kind that can be interacted with, such as an actor or item
@@ -105,85 +106,86 @@ Notes:
 - packageID is the ID of an AI package
 
 ### Menu Types
-General Type
--
-Number | Type
--
-1 | Stats, magic, inventory, quest log
-2 | Any other non-console menu
-3 | Console: broken functionality, use function `IsConsoleOpen`
 
-Specific Type
--
-Number | Type
--
-1001 | Message
-1002 | Inventory
-1003 | Stats
-1004 | HUDMain
-1005 | HUDInfo
-1006 | HUDReticle
-1007 | Loading
-1008 | Container, Barter
-1009 | Dialog
-1010 | HUDSubtitle
-1011 | Generic
-1012 | SleepWait
-1013 | Pause
-1014 | LockPick
-1015 | Options
-1016 | Quantity
-1017 | Audio
-1018 | Video
-1019 | VideoDisplay
-1020 | Gameplay
-1021 | Controls
-1022 | Magic
-1023 | Map
-1024 | MagicPopup
-1025 | Negotiate
-1026 | Book
-1027 | LevelUp
-1028 | Training
-1029 | BirthSign
-1030 | Class
-1031 | Attributes
-1032 | Skills
-1033 | Specialization
-1034 | Persuasion
-1035 | Repair / Ingredient Selection (Alchemy sub-menu)
-1036 | RaceMenu (Character Generation Screen)
-1037 | SpellPurchase
-1038 | Load
-1039 | Save
-1040 | Alchemy
-1041 | SpellMaking
-1042 | Enchantment
-1043 | EffectSetting
-1044 | Main
-1045 | Breath
-1046 | QuickKeys
-1047 | Credits
-1048 | SigilStone
-1049 | Recharge
-1051 | TextEdit
+|General Type|
+|-|
+|Number | Type|
+|-|-|
+|1 | Stats, magic, inventory, quest log|
+|2 | Any other non-console menu|
+|3 | Console: broken functionality, use function `IsConsoleOpen`|
 
-OnAdd
+|Specific Type|
+|-|
+|Number | Type|
+|-|-|
+|1001 | Message|
+|1002 | Inventory|
+|1003 | Stats|
+|1004 | HUDMain|
+|1005 | HUDInfo|
+|1006 | HUDReticle|
+|1007 | Loading|
+|1008 | Container, Barter|
+|1009 | Dialog|
+|1010 | HUDSubtitle|
+|1011 | Generic|
+|1012 | SleepWait|
+|1013 | Pause|
+|1014 | LockPick|
+|1015 | Options|
+|1016 | Quantity|
+|1017 | Audio|
+|1018 | Video|
+|1019 | VideoDisplay|
+|1020 | Gameplay|
+|1021 | Controls|
+|1022 | Magic|
+|1023 | Map|
+|1024 | MagicPopup|
+|1025 | Negotiate|
+|1026 | Book|
+|1027 | LevelUp|
+|1028 | Training|
+|1029 | BirthSign|
+|1030 | Class|
+|1031 | Attributes|
+|1032 | Skills|
+|1033 | Specialization|
+|1034 | Persuasion|
+|1035 | Repair / Ingredient Selection (Alchemy sub-menu)|
+|1036 | RaceMenu (Character Generation Screen)|
+|1037 | SpellPurchase|
+|1038 | Load|
+|1039 | Save|
+|1040 | Alchemy|
+|1041 | SpellMaking|
+|1042 | Enchantment|
+|1043 | EffectSetting|
+|1044 | Main|
+|1045 | Breath|
+|1046 | QuickKeys|
+|1047 | Credits|
+|1048 | SigilStone|
+|1049 | Recharge|
+|1051 | TextEdit|
+
+###### OnAdd
 This only behaves as expected with persistent references (see the section on References). An
 item added to a container with this block and removed within the same call of this block will
 simply do nothing. An additional call is needed.
 
-OnDeath
+###### OnDeath
 If the scripted actor gets called with `SayTo` while this block activates (i.e. dies while
 talking), this block will trigger after `SayTo`. Additionally, this block type does not fire
 immediately, do not rely on this for time sensitive functionality.
 
-OnDrop
+###### OnDrop
 OnDrop only runs when the object is _removed_, not when it no longer exists. It also,
 confusingly, doesn't run when the object is dropped (i.e. placed on the ground). Thus this is
 not a test for seeing if an object is on the ground.
 
-OnEquip
+###### OnEquip
 OnEquip does not behave as expected. It'll only run on items that an actor can physically
 equip, regardless of status. 
 - Broken items and non-equippable items will fire this block
@@ -194,55 +196,55 @@ equip, regardless of status.
 - The game function `EquipItem` **does not** fire this block, use `EquipItem2`/`EquipItem2NS` instead
     - The game function `UnequipItem` **does** fire OnUnequip howeve
 
-OnHit
+###### OnHit
 The game function `GetDetected` behaves weirdly inside this block. This block fires _after_
 the hit occurs, not as it occurs, thus the actor will be in an aware state no matter what.
 Thus `GetDetected` will not provide the true value expected when used in this
 manner.
 
-OnHitWith
+###### OnHitWith
 This can work with objectIDs that are 'Activators', but only when the objectID hitting the
 scripted object is of the type Ammo. Other weapon types do not work.
 
-OnLoad
+###### OnLoad
 This block does not work with quest scripts. A 3D object loads whenever you enter the 5x5 cell
 grid in an exterior cell, or in any interior cell.
 
-OnMagicEffectHit
+###### OnMagicEffectHit
 This works on actors, activators, containers, doors, and furniture. It does not work on lights
 or regular inventory items. In addition, the object being hit must have collision meshes.
 
-OnMurder
+###### OnMurder
 As this is broken, build murder detection with 'OnDeath' instead.
 
-OnPackageChange
+###### OnPackageChange
 Interrupt packages, such as combat or conversation packages, do not count towards a package
 change. A change only occurs when a new package is chosen by the scripted actor, it must be
 different from the specified packageID
 
-OnPackageDone
+###### OnPackageDone
 Packages can be completed through a failure state, unless the 'Must Reach Location' or 'Must
 Complete' flags of the package are checked. Some packages also have no complete state, and
 thus will never trigger this block.
 
-OnTriggerMob
+###### OnTriggerMob
 Mobile objects are considered: actors (NPCs and creatures), arrows, non-bolt magic
 projectiles, and activators with collision.
 
-OnUnequip
+###### OnUnequip
 Broken items do not fire this block, even if they can be equipped/unequipped. To fire this
 block, the broken item must be repaired.
 
-ScriptEffectFinish
+###### ScriptEffectFinish
 'ScriptEffectUpdate' block with a `return` statement placed before this block will prevent
 this block from running. See the section on the [Return Statement](#return-statement) in
 [Statements](#statements) for more info.
 This block won't fire for scripted apparel enchantments or abilities.
 
-ScriptEffectStart
+###### ScriptEffectStart
 This block won't fire for scripted apparel enchantments or abilities.
 
-ScriptEffectUpdate
+###### ScriptEffectUpdate
 'ScriptEffectUpdate' block with a `return` statement placed before this block will prevent
 this block from running. See the section on the [Return Statement] in [Statements] for more
 info.
@@ -274,8 +276,6 @@ end
 Variable declaration happens outside of "begin blocks". Declaration is different from
 definition. A declaration only describes the type that a variable has, it does not initialize a
 value. All types will default initialize to 0 for comparative needs.
-
-language-reference core test- Check if all types default initialize to 0
 
 ## Set Statement
 ```ebnf
@@ -380,17 +380,17 @@ end
 Conditionals in `obl` are standard to most languages for the most part. `obl` accepts the
 standard C-style comparator binary operators:
 
-Symbol | Meaning
--
-`==` | Left equal to right
-`!=` | Left not equal to right
-`>` | Left greater than right
-`<` | Left less than right
-`>=` | Left greater than or equal to right
-`<=` | Left less than or equal to right
-`!` | Unary operation, returns opposite truthy/falsy value for an expression
-`&&` | Left and right are both truthy, AND operation
-`||` | Left or right is truthy, OR operation
+|Symbol | Meaning|
+|-|-|
+|`==` | Left equal to right|
+|`!=` | Left not equal to right|
+|`>` | Left greater than right|
+|`<` | Left less than right|
+|`>=` | Left greater than or equal to right|
+|`<=` | Left less than or equal to right|
+|`!` | Unary operation, returns opposite truthy/falsy value for an expression|
+|`&&` | Left and right are both truthy, AND operation|
+|`||` | Left or right is truthy, OR operation|
 
 ### Conditions always evaluate
 Processing of conditionals is not exactly standard. While most languages will only ever
@@ -476,7 +476,7 @@ conditions are standard conditions, however they do not always evaluate like con
 well, while statements will process within a script execution time. They will not process per
 line.
 
-Remember to have a condition that actually will return [falsy](#truthyfalsy-values)
+Remember to have a condition that actually will return [falsy](#truthy/falsy-values)
 eventually. The game will lock up otherwise.
 
 ### Break Statement
