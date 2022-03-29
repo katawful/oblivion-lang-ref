@@ -10,9 +10,122 @@
 * Strings
   Like a lot of languages, strings in `obl` are containers that contain characters. They are closest
   to the `std::string` type found in C++ in which standard string operations are allowed for normal
-  use, but also allows easy access to the container operations available.
+  use, but also allows easy access to the container operations available. They are overall a
+  straightforward type.
+
+  Strings in `obl` are not a vanilla type, and thus don't interface so cleanly with other types.
+  Many vanilla functions have a new "EX" (i.e. `MessageEX`) version that can take these strings.
 
   Additionally, like array variables, they are saved to the player's save game unless deleted.
 
+** Operators
+   There are a number of operators that can work on the string type:
+   @table
+   *Operator* | *Type* | *Use* | *Precedence*
+   -
+   `+` | Binary | Concatenation | 9
+   `$` | Unary | Stringicize | 12
+   `[]` | Binary | Subscript | 15
+   `:` | Binary | Slice/Range | 3
+   `#` | Unary | Numericize | 12
+   @end
+
+*** Concatenation
+    Concatenation is the combination of 2 strings literally. Thus the concatenation of "Adoring" and
+    "Fan" is "AdoringFan". Note the lack of whitespace in the new string. `obl` can't always
+    implicitly convert strings, only functions that explicitly return strings are allowed. The rest
+    must be stringicized (see below).
+
+    @code ebnf
+    concatenation = string, '+', string;
+    @end
+
+    @code obse
+    scn concatentation
+    string_var string
+    begin gamemode
+    let string := "Adoring"
+    Print string + "Fan"
+    end
+    @end
+
+*** Stringicize
+    The stringicize operator is simply a shorthand for the function `ToString`. It attempts to
+    convert the expression argument to a string. Numerical expressions convert to the string
+    representation of the result. Object expressions convert to the object name if possible, else
+    the formID. Strings are not converted, thus this operator does not run.
+
+    @code ebnf
+    stringicize = '$', (expression);
+    @end
+
+    @code obse
+    scn stringicize
+    begin gamemode
+    print "Player's name is: " + $(PlayerREF)
+    end
+    @end
+
+*** Subscript
+    As strings are containers, they can be directly subscripted like arrays. The subscripted string
+    returns a string containing the character.
+
+    @code ebnf
+    subscript = variable, '[', [{(expression)}, literal], ']';
+    @end
+
+    @code obse
+    scn subscript
+    string_var string
+    begin gamemode
+    let string := "Adoring Fan"
+    Print "2nd character is: " + string[1]
+    end
+    @end
+
+*** Slice/Range
+    The slice/range operator allows a specific range of the string container. It can return the
+    characters over the range, and also be used for iteration.
+
+    #contexts language-ref documentation
+    - [ ] change syntax, expressions can be used
+    @code ebnf
+    sliceRange = {literal}, ':', {literal};
+    @end
+
+    @code obse
+    scn stringSliceRange
+    string_var string
+    string_var iter
+    begin gamemode
+    let string := "Adoring Fan"
+    Print "First 4 characters are: " + string[3:]
+    ; iterate over the last 4 characters
+    foreach iter <- string[:-4]
+    ; ...
+    loop
+    end
+    @end
+
+*** Numericize
+    Numericize takes a string and attempts to convert it to a number. A shorthand for `ToNumber`. It
+    is assumed that the string is in standard decimal notation. If the string starts with "0x", it
+    attempts to convert the string as a hexadecimal number. Returns 0 when it fails.
+
+    @code ebnf
+    numericize = '#', (expression);
+    @end
+
+    @code obse
+    scn Numericize
+    string_var string
+    begin gamemode
+    let string := "1230"
+    PrintC "%g", (4 + #string)
+    end
+    @end
+
+
+   ===
 #comment
 vim:tw=100:ft=norg:norl:
