@@ -382,8 +382,8 @@ The width of the first matrix must be equal to the height of the second matrix.
 
 Two 1D arrays cannot be multiplied since a row vector multiplied by a column vector is
 different than a column vector multiplied by a row vector. This is an ambiguity that is solved
-by [ForceRowVector](#forcerowvector) and [ForceColumnVector](#forcecolumnvector). Process one or both with these
-functions to remove the ambiguity.
+by [`ForceRowVector`](#forcerowvector) and [`ForceColumnVector`](#forcecolumnvector).
+Process one or both with these functions to remove the ambiguity.
 
 ## Vector
 Vectors can be defined in 3 ways:
@@ -391,14 +391,14 @@ Vectors can be defined in 3 ways:
 2. A 2D array with 1 row [Row Vector](#row-vector)
 3. A 2D array where each row only has 1 element [Column Vector](#column-vector)
 
-1D Vectors
-1D vectors can be ambiguous, use [ForceRowVector](#forcerowvector) or [ForceColumnVector](#forcecolumnvector) if no
-ambiguity is allowed
+###### 1D Vectors
+1D vectors can be ambiguous, use [`ForceRowVector`](#forcerowvector) or 
+[`ForceColumnVector`](#forcecolumnvector) if no ambiguity is allowed
 
-Row Vector
+###### Row Vector
 Type 2 is a row vector
 
-Column Vector
+###### Column Vector
 Type 3 is a column vector
 
 ### ForceRowVector

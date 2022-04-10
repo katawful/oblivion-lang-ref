@@ -8,7 +8,8 @@
 @end
 
 * Expressions
-  Expressions return a value of one of the possible [Types]{*** Types}. The general forms are as so:
+  Expressions return a value of one of the possible [types]{:../language/Types:# Types}. The general
+  forms are as so:
 
   @code ebnf
   expression = literal
@@ -22,7 +23,7 @@
   Most objects being interacted with are considered expressions and can be used directly. All
   variable types, all literals, and function that returns any value but null are expressions.
 
-  Literals can be found in [Literals]{**** Literal Types}.
+  Literals can be found in {:../language/Types:# Literal Types}[Literals] under Types.
 
  ** Associativity 
     It can be assumed that all expressions in `obl` is left associative. Precedence controls order
@@ -30,11 +31,11 @@
 
  ** Variables as Expressions
     Any variable type can be used in a place an expression is expected, when strict typing is not a
-    concern. If dealing with a function found in the original release of the game, use [Oblivion
-    expressions]{**** Implicit Type Forcing via OBSE Expressions (OE)}. When used as expressions,
-    variables cannot take any parameters and behave solely as placeholders for the literal types.
+    concern. If dealing with a function found in the original release of the game, use [Oblivion expressions]{:../constructs:*** Implicit Type Forcing via OBSE Expressions (OE)}.
+    When used as expressions, variables cannot take any parameters and behave solely as placeholders
+    for the literal types.
 
-    See [Variables]{*** Variables} for how variables are declared and [Variable Types] for the types
+    See [Variables]{:../language/variables:# Variables} for how variables are declared and [Variable Types] for the types
     available.
 
  ** Game Expressions
@@ -61,9 +62,26 @@
     end
     @end
 
+** Expression Types
+   There are 4 main types of named expressions in `obl`.
+
+*** Is/Has Expressions
+    Is/Has expressions typically return the status of a value of an object. They are almost always
+    booleans, returning 1 for truthy.
+
+*** Get Expressions
+    Get expressions return the value specified of an object. They can return any type.
+
+*** To Expressions
+    Converts between data types. Generally named as to what it converts to, not from.
+
+*** Unnamed Expressions
+    Unnamed expressions do not follow a consistent naming, but are generally self explanatory.
+    There are unnamed game statements, specificity is defined in the documentation these functions.
+
  ** Available Expressions
-    {:expressions/math:}[Math Functions]
-    {:expressions/arrays:}[Array Functions]
+    - {:math:}[Math Functions]
+    - {:arrays:}[Array Functions]
 
 #comment
 vim:tw=100:ft=norg:norl:

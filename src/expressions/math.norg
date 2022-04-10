@@ -158,7 +158,7 @@
 
     `(atan:float) ratan2 arg1:float arg2:float`
 
-    See the section on [Linear Algebra]{**** Linear Algebra} for vectors forms.
+    See the section on {* Linear Algebra}[Linear Algebra] for vectors forms.
 
  ** Cos
     Returns the cosine of the argument.
@@ -401,24 +401,24 @@
 
       Two 1D arrays cannot be multiplied since a row vector multiplied by a column vector is
       different than a column vector multiplied by a row vector. This is an ambiguity that is solved
-      by {****** ForceRowVector} and {****** ForceColumnVector}. Process one or both with these
-      functions to remove the ambiguity.
+			by {*** ForceRowVector}[`ForceRowVector`] and {*** ForceColumnVector}[`ForceColumnVector`].
+			Process one or both with these functions to remove the ambiguity.
 
  ** Vector
 		Vectors can be defined in 3 ways:
-    ~ A 1D array {| 1D Vectors}
-    ~ A 2D array with 1 row {| Row Vector}
-    ~ A 2D array where each row only has 1 element {| Column Vector}
+		~ A 1D array {****** 1D Vectors}
+		~ A 2D array with 1 row {****** Row Vector}
+		~ A 2D array where each row only has 1 element {****** Column Vector}
 
-    | 1D Vectors
-    1D vectors can be ambiguous, use {****** ForceRowVector} or {****** ForceColumnVector} if no
-    ambiguity is allowed
+****** 1D Vectors
+			 1D vectors can be ambiguous, use {*** ForceRowVector}[`ForceRowVector`] or 
+			 {*** ForceColumnVector}[`ForceColumnVector`] if no ambiguity is allowed
 
-    | Row Vector
-    Type 2 is a row vector
+****** Row Vector
+			 Type 2 is a row vector
 
-    | Column Vector
-    Type 3 is a column vector
+****** Column Vector
+			 Type 3 is a column vector
 
   *** ForceRowVector
       Takes a 1D array and returns an equivalent 2D array where the outer array's only element is

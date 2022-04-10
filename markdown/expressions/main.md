@@ -1,5 +1,6 @@
 # Expressions
-Expressions return a value of one of the possible [Types](#types). The general forms are as so:
+Expressions return a value of one of the possible [types](../language/Types.md#types). The general
+forms are as so:
 
 ```ebnf
 expression = literal
@@ -13,7 +14,7 @@ expression = literal
 Most objects being interacted with are considered expressions and can be used directly. All
 variable types, all literals, and function that returns any value but null are expressions.
 
-Literals can be found in [Literals](#literal-types).
+Literals can be found in [Literals](../language/Types.md#literal-types) under Types.
 
 ## Associativity 
 It can be assumed that all expressions in `obl` is left associative. Precedence controls order
@@ -21,10 +22,11 @@ of operations for expressions.
 
 ## Variables as Expressions
 Any variable type can be used in a place an expression is expected, when strict typing is not a
-concern. If dealing with a function found in the original release of the game, use [Oblivionexpressions](#implicit-type-forcing-via-obse-expressions-oe). When used as expressions,
-variables cannot take any parameters and behave solely as placeholders for the literal types.
+concern. If dealing with a function found in the original release of the game, use [Oblivion expressions](../constructs.md#implicit-type-forcing-via-obse-expressions-oe).
+When used as expressions, variables cannot take any parameters and behave solely as placeholders
+for the literal types.
 
-See [Variables](#variables) for how variables are declared and [Variable Types] for the types
+See [Variables](../language/variables.md#variables) for how variables are declared and [Variable Types] for the types
 available.
 
 ## Game Expressions
@@ -51,7 +53,24 @@ let x := GetActorMinLevel (Anusai.GetNthDetectedActor 0) ; parameter is a groupe
 end
 ```
 
+## Expression Types
+There are 4 main types of named expressions in `obl`.
+
+### Is/Has Expressions
+Is/Has expressions typically return the status of a value of an object. They are almost always
+booleans, returning 1 for truthy.
+
+### Get Expressions
+Get expressions return the value specified of an object. They can return any type.
+
+### To Expressions
+Converts between data types. Generally named as to what it converts to, not from.
+
+### Unnamed Expressions
+Unnamed expressions do not follow a consistent naming, but are generally self explanatory.
+There are unnamed game statements, specificity is defined in the documentation these functions.
+
 ## Available Expressions
-[Math Functions](#expressionsmathmd)
-[Array Functions](#expressionsarraysmd)
+- [Math Functions](math.md)
+- [Array Functions](arrays.md)
 
