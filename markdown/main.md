@@ -16,17 +16,17 @@ language-reference core test- verify that "compilation" is just parsing
 syntax, this documentation will simply be assuming the features provided with the original game
 are not solely valid. Any problems related to that will be discussed as they arrive.
 
-- [Language Notation](#notation.md)
-- [General Language Constructs](#constructs.md)
+- [Language Notation](notation.md)
+- [General Language Constructs](constructs.md)
 
 ## Language
-- [Lexical Conventions](#language/lexical.md)
-- [Operators](#language/operators.md)
-- [Available Types](#language/types.md)
-- [Script Types](#language/scripttypes.md)
-- [Variable Types](#language/variables.md)
-- [Language Statements](#language/statements.md)
+- [Lexical Conventions](language/lexical.md)
+- [Operators](language/operators.md)
+- [Available Types](language/types.md)
+- [Script Types](language/scripttypes.md)
+- [Variable Types](language/variables.md)
+- [Language Statements](language/statements.md)
 
 ## Expressions
-- [Main Details](#expression/smain.md)
+- [Main Details](expression/smain.md)
 
