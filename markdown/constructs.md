@@ -51,14 +51,15 @@ begin MenuMode
 end
 ```
 
-See ["Begin" Blocks](#begin-blocks) and [Variable Declarators](#variable-declarators)
-for more information on top-level information.
+See ["Begin" Blocks](language/statements.md#begin-blocks) and 
+[Variable Declarators](language/statements.md#variable-declarators) for more information on
+top-level information.
 
 ## Script Type
 While not a part of the language spec itself, `obl` language files when brought into the game's
 development tools can be defined as one of 3 types: "Quest Script", "Object Script", and "Magic
 Effect Script", with "Object Script" being the default. More details about these will be
-discussed in [Script Types](#script-types).
+discussed in [Script Types](language/script-types.md#script-types).
 
 ## Static Typing by Assumption
 `obl` is technically dynamically typed. There are a lot of scenarios where the compiler does

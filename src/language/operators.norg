@@ -1,10 +1,10 @@
 @document.meta
-  title: operators
-  description: List of operators
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
+title: operators
+description: List of operators
+authors: kat
+categories: 
+created: 2022-03-18
+version: 0.0.11
 @end
 
 * Operators
@@ -61,5 +61,5 @@
 
   > Note that highest precedence is 15
 
-#comment
-vim:tw=100:ft=norg:norl:
+  #comment
+  vim:tw=100:ft=norg:norl:

@@ -5,7 +5,6 @@ to keep a convention.
 
 ## Keywords
 The following is a list of language keywords:
-language-reference lexical test- check begin and end if they're keywords
 - while
 - foreach
 - loop

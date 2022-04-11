@@ -19,7 +19,6 @@ Variable types are the types that variables can be.
 - reference: stores a game object, object must be persistent
 - array: reference to an array, type unspecified
 - string: reference to a string, a container type
-language-reference core test- check if numbers are actually stored as floats
 
 ```ebnf
 variableDeclaration = varType, variable;

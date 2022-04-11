@@ -1,5 +1,5 @@
 # Variables
-Variables store values of the specified type (see: [Variable Types](#variable-types)). They
+Variables store values of the specified type (see: [Variable Types](Types.md#variable-types)). They
 can be contained in 3 scopes: global, quest, and script.
 
 ## Global Variables
@@ -9,7 +9,7 @@ have a namespace, they can easily become overloaded. Thus they should only be us
 player intervention is needed via the game's console.
 
 ## Quest Variables
-Quest variables are namespaced variables. See [Quest Namespace](#quest-namespace).
+Quest variables are namespaced variables. See [Quest Namespace](script-types.md#quest-namespace).
 
 ## Script Variables
 Script variables are scoped to the script that calls it, but its time of existence depends on

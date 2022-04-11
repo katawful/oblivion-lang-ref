@@ -26,8 +26,8 @@ concern. If dealing with a function found in the original release of the game, u
 When used as expressions, variables cannot take any parameters and behave solely as placeholders
 for the literal types.
 
-See [Variables](../language/variables.md#variables) for how variables are declared and [Variable Types] for the types
-available.
+See [Variables](../language/variables.md#variables) for how variables are declared
+and [Variable Types](../language/Types.md#variable-types) for the types available.
 
 ## Game Expressions
 `obl` has a variety of built-in functions that return values based on states in the game itself.

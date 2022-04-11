@@ -80,15 +80,12 @@ Returns the result of the base raised to the exponent.
 `(pow:float) pow base:float exponent:float`
 
 ## Rand
-language-reference test math- see if rand is inclusive
-- see if rand is a float
-      Returns a random number between the two arguments, inclusive.
+Returns a random number between the two arguments, inclusive.
 
 `(rand:float) rand min:float max:float`
 
 ## GetRandomPercent
-language-reference formatting- mark soft deprecated functions?
-      Returns a random number between 0 and 99 inclusive.
+Returns a random number between 0 and 99 inclusive.
 
 `(GetRandomPercent:int) GetRandomPercent`
 
@@ -96,8 +93,7 @@ Note that this function was originally the only available random function in `ob
 not be used when working with new code.
 
 ## SquareRoot
-language-reference formatting- think about formatting for aliases here
-      Returns the square root of the argument.
+Returns the square root of the argument.
 
 `(SquareRoot:float) SquareRoot arg:float`
 
@@ -201,8 +197,6 @@ Returns the hyperbolic tangent of the argument.
 `(tanh:float) rtanh arg:float`
 
 # Bitwise Operations
-language-reference core documentation- explain bitwise operations
-
 `obl` supports standard bitwise operations, with the caveat that no new type for binary numbers
 being added. Manual conversion between binary and decimal must be performed.
 
@@ -250,8 +244,6 @@ Returns the logical XOR of the two arguments.
 `(LogicalXOR:int) LogicalXOR arg1:int arg2:int`
 
 # Linear Algebra
-language-reference core documentation- explain linear algebra somewhat
-
 `obl` supports linear algebra directly, using the array type of type array to create vectors and
 matrices. Matrices and vectors must always have numbers. Any other type is an error.
 
@@ -300,7 +292,6 @@ with 1 and every other element filled with 0.
 ### GenerateRotationMatrix
 Returns a 3x3 square matrix that can serve as a rotation matrix about the specified axis.
 Rotation matrixes are always invertible, and their inverse is equal to their transpose.
-language-reference core test- find out what axis is
 
 `(rotationMatrix:array) GenerateRotationMatrix axis:axis angle:float`
 

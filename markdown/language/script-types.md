@@ -53,9 +53,9 @@ details.
 
 ## Magic Effect Scripts
 Magic effect scripts are used to create magic effects. They are unique in that they only fire
-during when 'GameMode' blocks are active but only use the 3 unique [Magic Effect Block Types](#magic-effect-block-types).
-Some other block types work, but this behavior is unpredictable. 'MenuMode' is the only one that
-behaves exactly. These scripts are mostly designed to run on actors (NPCs and creatures), but
-will run on actor corpses, doors, and furniture. When run on these objects, the script will run
-once.
+during when 'GameMode' blocks are active but only use the 3 unique 
+[Magic Effect Block Types](statements.md#magic-effect-block-types). Some other block types work,
+but this behavior is unpredictable. 'MenuMode' is the only one that behaves exactly. These
+scripts are mostly designed to run on actors (NPCs and creatures), but will run on actor corpses,
+doors, and furniture. When run on these objects, the script will run once.
 

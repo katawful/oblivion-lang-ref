@@ -1,31 +1,31 @@
 @document.meta
-  title: variables
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-18
-  version: 0.0.11
+title: variables
+description: 
+authors: kat
+categories: 
+created: 2022-03-18
+version: 0.0.11
 @end
 
 * Variables
-  Variables store values of the specified type (see: [Variable Types]{**** Variable Types}). They
+  Variables store values of the specified type (see: [Variable Types]{:Types:# Variable Types}). They
   can be contained in 3 scopes: global, quest, and script.
 
- ** Global Variables
-    Global variables are variables that can be accessed without any namespace. However they can only
-    be floats or integers, and thus are mostly used for game settings. Additionally since they don't
-    have a namespace, they can easily become overloaded. Thus they should only be used when direct
-    player intervention is needed via the game's console.
+** Global Variables
+   Global variables are variables that can be accessed without any namespace. However they can only
+   be floats or integers, and thus are mostly used for game settings. Additionally since they don't
+   have a namespace, they can easily become overloaded. Thus they should only be used when direct
+   player intervention is needed via the game's console.
 
- ** Quest Variables
-    Quest variables are namespaced variables. See [Quest Namespace]{***** Quest Namespace}.
+** Quest Variables
+   Quest variables are namespaced variables. See [Quest Namespace]{:script-types:# Quest Namespace}.
 
- ** Script Variables
-    Script variables are scoped to the script that calls it, but its time of existence depends on
-    the type of script/the object attached to it.
-    - For object scripts, variables are temporarily saved to the object its attached to.
-    - For magic effect scripts, variables are never saved.
-    - For user-defined functions, variables are never saved.
+** Script Variables
+   Script variables are scoped to the script that calls it, but its time of existence depends on
+   the type of script/the object attached to it.
+   - For object scripts, variables are temporarily saved to the object its attached to.
+   - For magic effect scripts, variables are never saved.
+   - For user-defined functions, variables are never saved.
 
 #comment
 vim:tw=100:ft=norg:norl:
