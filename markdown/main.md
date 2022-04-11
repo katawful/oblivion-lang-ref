@@ -22,11 +22,11 @@ are not solely valid. Any problems related to that will be discussed as they arr
 ## Language
 - [Lexical Conventions](language/lexical.md)
 - [Operators](language/operators.md)
-- [Available Types](language/types.md)
-- [Script Types](language/scripttypes.md)
+- [Available Types](language/Types.md)
+- [Script Types](language/script-types.md)
 - [Variable Types](language/variables.md)
 - [Language Statements](language/statements.md)
 
 ## Expressions
-- [Main Details](expression/smain.md)
+- [Main Details](expressions/main.md)
 
