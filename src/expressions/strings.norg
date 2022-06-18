@@ -1,10 +1,10 @@
 @document.meta
-  title: strings
-  description: 
-  authors: kat
-  categories: 
-  created: 2022-03-22
-  version: 0.0.11
+title: strings
+description: 
+authors: kat
+categories: 
+created: 2022-03-22
+version: 0.0.11
 @end
 
 * Strings
@@ -313,8 +313,8 @@
     - `-`: Leading sign
     - `e`: Scientific notation
     - `.`: Decimal
-    Conversion to a number halts at the first invalid character. This is not the long hand for the
-    numericize operator.
+      Conversion to a number halts at the first invalid character. This is not the long hand for the
+      numericize operator.
 
     `(number:float) sv_ToNumeric arg:string`
 
@@ -439,6 +439,6 @@
 
     `(lower:int) ToLower character:int`
 
-   ===
+    ===
 #comment
 vim:tw=100:ft=norg:norl:
