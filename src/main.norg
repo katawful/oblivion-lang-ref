@@ -44,6 +44,9 @@ version: 0.0.11
 
 ** Expressions
    - {:expressions/main:}[Main Details]
+   - {:expressions/math:}[Math Functions]
+   - {:expressions/array:}[Array Functions]
+   - {:expressions/strings:}[String Functions]
 
 ** Objects
    - {:objects/main:}[Objects Overview]
