@@ -38,9 +38,9 @@ version: 0.0.11
    - {:language/variables:}[Variable Types]
 
 ** Statements
-   - {:language/statements:}[Language Statements]
-   - {:event-handlers:}[Event Handlers]
-   - {:user-defined-functions:}[User-Defined Function]
+   - {:statements/statements:}[Language Statements]
+   - {:statements/event-handlers:}[Event Handlers]
+   - {:statements/user-defined-functions:}[User-Defined Function]
 
 ** Expressions
    - {:expressions/main:}[Main Details]
