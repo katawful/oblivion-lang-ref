@@ -2,8 +2,10 @@
 
 This reference is written currently in Neorg, and thus must be read in said plugin. Conversion to other formats + a site will come at a later date
 
+Link to reference: [Reference](markdown/readme.md)
+
 # Status
-This reference is incomplete. It is not recommended for use
+This reference is incomplete.
 
 ## Progress
 - [x] Structure
