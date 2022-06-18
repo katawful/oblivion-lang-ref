@@ -43,8 +43,8 @@ There are 3 types of arrays
 3. StringMap: Unordered array where the key is any string expression.
 
 ## Iteration of Arrays
-Generally arrays can be processed in 2 manners: [while statement](../language/statements.md#while-statement)
-and [foreach statement](../language/statements.md#foreach-statement). Both have upsides and
+Generally arrays can be processed in 2 manners: [while statement](../statements/statements.md#while-statement)
+and [foreach statement](../statements/statements.md#foreach-statement). Both have upsides and
 should be considered.
 
 ### Using While Loops to Iterate Arrays

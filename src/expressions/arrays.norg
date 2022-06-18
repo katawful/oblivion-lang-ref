@@ -54,8 +54,8 @@ version: 0.0.11
    ~ StringMap: Unordered array where the key is any string expression.
 
 ** Iteration of Arrays
-   Generally arrays can be processed in 2 manners: [while statement]{:../language/statements:# while statement}
-   and [foreach statement]{:../language/statements:# ForEach Statement}. Both have upsides and
+	 Generally arrays can be processed in 2 manners: [while statement]{:../statements/statements:# while statement}
+	 and [foreach statement]{:../statements/statements:# ForEach Statement}. Both have upsides and
    should be considered.
 
 *** Using While Loops to Iterate Arrays

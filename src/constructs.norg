@@ -60,8 +60,8 @@ version: 0.0.11
    end
    @end
 
-   See ["Begin" Blocks]{:language/statements:** "Begin" Blocks} and 
-   [Variable Declarators]{:language/statements:** Variable Declarators} for more information on
+	 See ["Begin" Blocks]{:statements/statements:** "Begin" Blocks} and 
+	 [Variable Declarators]{:statements/statements:** Variable Declarators} for more information on
    top-level information.
 
 ** Script Type

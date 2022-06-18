@@ -51,8 +51,8 @@ begin MenuMode
 end
 ```
 
-See ["Begin" Blocks](language/statements.md#begin-blocks) and 
-[Variable Declarators](language/statements.md#variable-declarators) for more information on
+See ["Begin" Blocks](statements/statements.md#begin-blocks) and 
+[Variable Declarators](statements/statements.md#variable-declarators) for more information on
 top-level information.
 
 ## Script Type
