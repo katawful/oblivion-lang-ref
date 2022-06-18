@@ -25,8 +25,15 @@ are not solely valid. Any problems related to that will be discussed as they arr
 - [Available Types](language/Types.md)
 - [Script Types](language/script-types.md)
 - [Variable Types](language/variables.md)
-- [Language Statements](language/statements.md)
+
+## Statements
+- [Language Statements](statments/statements.md)
+- [Event Handlers](statements/event-handlers.md)
+- [User-Defined Functions](statements/user-defined-functions.md)
 
 ## Expressions
 - [Main Details](expressions/main.md)
 
+## Objects
+- [Objects Overview](objects/main.md)
+- [Using Object-Oriented Programming Skills](objects/oriented.md)
