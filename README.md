@@ -9,15 +9,15 @@ This reference is incomplete. It is not recommended for use
 - [x] Structure
 - [x] Statements
 - [x] Arrays
-- [ ] Strings
+- [x] Strings
 - [x] Math
 - [ ] User Interaction
-- [ ] User Defined Functions
-- [ ] Event Handlers
+- [x] User Defined Functions
+- [x] Event Handlers
 - [ ] Object Functions
   - [ ] Inventory References
   - [ ] Types
-  - [ ] OOP-Like Model
+  - [x] OOP-Like Model
 - [ ] User-Interface
 - [ ] Physics
 
