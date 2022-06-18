@@ -1,0 +1,119 @@
+@document.meta
+  title: event-handlers
+  description: 
+  authors: kat
+  categories: 
+  created: 2022-04-16
+  version: 0.0.11
+@end
+
+* Event Handlers
+  @code ebnf
+  registerEvent = 'SetEventHandler', event, script, [{filterPair}];
+  event = string;
+  script = identifier;
+  filterPair = variable, '::', literal;
+  @end
+
+  @code obse
+  scn EventHandler
+  ref functionScript
+  ref first
+  ref second
+  begin gamemode
+  let functionScript := someFunction
+  SetEventHandler "OnActivate" first::Player second::Anusai
+  end
+  @end
+
+  Event handlers allow functions to be called upon the iteration and/or update of an event in the
+  game, such as loading a save game or inputting a key. The old way to do this was to have a
+  conditional block always iterating during the game mode desired. Handlers are registered to a
+  single source, and are thus much faster and less script heavy.
+
+** Events
+   @table
+   Name | Parameters | Note Link
+   -
+   'OnHit' | target:ref attacker:ref | - 
+   'OnHitWith' | target:ref weapon:form | -
+   'OnMagicEffectHit' | target:ref effectCode:int | -
+   'OnMagicEffectHit2' | target:ref effect:ref | {# OnMagicEffectHit2}[Note]
+   'OnActorEquip' | target:ref item:form | -
+   'OnDeath' | target:ref killer:form | -
+   'OnMurder' | target:ref killer:form | -
+   'OnKnockout' | target:ref | -
+   'OnActorUnequip' | target:ref item:form | -
+   'OnAlarm Trespass' | alarmedActor:ref criminal:ref | -
+   'OnAlarm Steal' | alarmedActor:ref criminal:ref | -
+   'OnAlarm Attack' | alarmedActor:ref criminal:ref | -
+   'OnAlarm Pickpocket' | alarmedActor:ref criminal:ref | -
+   'OnAlarm Murder' | alarmedActor:ref criminal:ref | -
+   'OnPackageChange' | target:ref package:form | -
+   'OnPackageStart' | target:ref package:form | -
+   'OnPackageDone' | target:ref package:form | -
+   'OnStartCombat' | target:ref opponent:ref | -
+   'OnActivate' | activated:ref activating:ref | -
+   'OnVampireFeed' | n/a | {# OnVampireFeed}[Note]
+   'OnSkillUp' | skillAVCode:int | {# OnSkillUp}[Note]
+   'OnScriptedSkillUp' | skillAVCode:int amount:int | {# OnScriptedSkillUp}[Note]
+   'OnDrinkPotion' | drinker:ref potion:form | -
+   'OnEatIngredient' | eater:ref ingredient:form | {# OnEatIngredient}[Note]
+   'OnActorDrop' | dropper:ref droppedItem:ref | {# OnActorDrop}[Note]
+   'OnSpellCast' | caster:ref spell:form | {# OnSpellCast}[Note]
+   @end
+
+*** OnMagicEffectHit2
+    Only useful for effects which have valid formIDs at compile-time, such as with effects from
+    Oblivion Magic Extender plugin.
+
+*** OnVampireFeed
+    Invokes after the player finishes feeding as a vampire.
+
+*** OnSkillUp
+    Invoked after skill increases through use.
+
+*** OnScriptedSkillUp
+		When `ModPCSkill`/`AdvanceSkill` are used to increase skill before the skill is modified.
+
+*** OnEatIngredient
+    Also triggers OnActorEquip event.
+
+*** OnActorDrop
+    The dropped item is the new reference in the game world to this dropped item.
+
+*** OnSpellCast
+    Only invoked when the caster is an actor.
+
+** User-Defined Events
+   User-defined events can be created that be used like the builtin events.
+
+   The function used for the event handler always takes one argument, a StringMap that has the
+   following two keys:
+	 ~ 'eventName': A string indicating the event that occurred
+   ~ 'eventSender': A string indicating the origin of the event. By default it is the filename of
+    the mod that dispatched it, unless an alternate name was supplied.
+
+   This StringMap can contain additional data sent by the user-defined event.
+
+   @code obse
+   scn EventSetup
+   begin gamemode
+   end
+
+   scn EventHandler
+   array_var args
+   begin Function {args}
+     print "Event " + args->eventName + " received from " + args->eventSender
+     print $arg->activator + " was activated by " + $arg->activatedBy
+   end
+
+   scn EventSender
+   begin onActivate
+     DispatchEvent "Activated" (ar_Map "activator"::GetSelf "activatedBy"::GetActionRef)
+   end
+   @end
+
+
+#comment
+vim:tw=100:ft=norg:norl:
