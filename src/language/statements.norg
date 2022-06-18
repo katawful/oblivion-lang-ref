@@ -184,9 +184,10 @@ version: 0.0.11
     @end
 
 ****** OnAdd
-       This only behaves as expected with persistent references (see the section on References). An
-       item added to a container with this block and removed within the same call of this block will
-       simply do nothing. An additional call is needed.
+       This only behaves as expected with persistent references (see the section on
+       {:../objects/main:# References}[References]). An item added to a container with this block
+       and removed within the same call of this block will simply do nothing. An additional call is
+       needed.
 
 ****** OnDeath
        If the scripted actor gets called with `SayTo` while this block activates (i.e. dies while

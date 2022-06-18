@@ -145,7 +145,7 @@ version: 0.0.11
        Format specifiers can be found in the sections on Strings in Expressions.
 
 ****** 2
-       See the section on References for more details.
+       See the section on {:../objects/main:# References}[References] for more details.
 
 ** Null Type
    You cannot assign anything to the null type, it is simply returned upon a runtime error.

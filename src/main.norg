@@ -36,10 +36,18 @@ version: 0.0.11
    - {:language/Types:}[Available Types]
    - {:language/script-types:}[Script Types]
    - {:language/variables:}[Variable Types]
+
+** Statements
    - {:language/statements:}[Language Statements]
+   - {:event-handlers:}[Event Handlers]
+   - {:user-defined-functions:}[User-Defined Function]
 
 ** Expressions
    - {:expressions/main:}[Main Details]
+
+** Objects
+   - {:objects/main:}[Objects Overview]
+   - {:objects/oriented:}[Using Object-Oriented Programming Skills]
 
 #comment
 vim:tw=100:ft=norg:norl:
