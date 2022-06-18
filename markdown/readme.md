@@ -28,9 +28,9 @@ are not solely valid. Any problems related to that will be discussed as they arr
 
 ## Expressions
 - [Main Details](expressions/main.md)
-- [Math Functions](expression/math.md)
-- [Array Functions](expression/array.md)
-- [String Functions](expression/strings.md)
+- [Math Functions](expressions/math.md)
+- [Array Functions](expressions/array.md)
+- [String Functions](expressions/strings.md)
 
 ## Objects
 - [Objects Overview](objects/main.md)
